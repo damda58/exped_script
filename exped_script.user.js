@@ -3,7 +3,7 @@
 // @namespace    damda58
 // @downloadURL  https://github.com/damda58/exped_script/raw/master/exped_script.user.js
 // @updateURL    https://github.com/damda58/exped_script/raw/master/exped_script.user.js
-// @version      0.8
+// @version      0.9
 // @description  try to take over the world!
 // @author       DC
 // @match        https://*.ogame.gameforge.com/game/*
@@ -271,7 +271,7 @@ class Exped
 
                 //Clic Good night
                 //[button_GN].forEach(btn =>
-                                    {
+//                                    {
                   //  btn.addEventListener('click', () =>
 //                                         {
                         //Récupère le nombre de planètes pour vérifier qu'il n'y en a pas de dispo

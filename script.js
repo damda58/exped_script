@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         Exped Script
 // @namespace    http://tampermonkey.net/
-// @version      0.2
+// @version      0.3
 // @description  try to take over the world!
-// @author       You
+// @author       DC
 // @match        https://*.ogame.gameforge.com/game/*
 // @grant        GM_addStyle
 // @run-at       document-start

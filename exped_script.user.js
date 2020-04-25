@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Exped Script
+// @name         exped_script
 // @namespace    https://github.com/damda58/exped_script/blob/master/script.js
 // @version      0.6
 // @description  try to take over the world!

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Exped Script
 // @namespace    http://tampermonkey.net/
-// @version      0.3
+// @version      0.5
 // @description  try to take over the world!
 // @author       DC
 // @match        https://*.ogame.gameforge.com/game/*

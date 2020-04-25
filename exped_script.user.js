@@ -1,6 +1,8 @@
 // ==UserScript==
 // @name         exped_script
-// @namespace    https://github.com/damda58/exped_script/blob/master/script.js
+// @namespace    damda58
+// @downloadURL  https://github.com/damda58/exped_script/blob/master/exped_script.user.js
+// @updateURL    https://github.com/damda58/exped_script/blob/master/exped_script.user.js
 // @version      0.6
 // @description  try to take over the world!
 // @author       DC

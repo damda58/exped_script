@@ -3,7 +3,7 @@
 // @namespace    damda58
 // @downloadURL  https://github.com/damda58/exped_script/raw/master/exped_script.user.js
 // @updateURL    https://github.com/damda58/exped_script/raw/master/exped_script.user.js
-// @version      0.9
+// @version      0.10
 // @description  try to take over the world!
 // @author       DC
 // @match        https://*.ogame.gameforge.com/game/*
@@ -246,9 +246,9 @@ class Exped
 
                 //Event sur input
                // [input_heure].forEach(btn =>
-                                      {
+ //                                     {
                  //   btn.addEventListener('change', () =>
-                                         {
+   //                                      {
                         //alert(document.getElementById("send_heure").value);
                    //     localStorage.setItem("heure_retour",document.getElementById("send_heure").value);
                     //})});

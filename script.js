@@ -78,7 +78,7 @@ class Exped
     start()
     {
         this.expedition();
-        this.show_fleet();
+        //this.show_fleet();
     }
 
     show_fleet()
@@ -145,29 +145,29 @@ class Exped
                 document.querySelector('#ul_auto').appendChild(check_auto);
 
                 //Input heure retour
-                var div_heure = document.createElement("div");
-                div_heure.setAttribute('id','div_heure');
-                div_heure.setAttribute('class','div_heure');
-                div_heure.innerHTML='<label for="send_heure">DateHeure de retour souhaitée (format YYYY-MM-DD HH:MM:SS)</label>';
-                document.querySelector('#allornone').appendChild(div_heure);
-                var input_heure = document.createElement("input");
-                input_heure.setAttribute('type','text');
-                input_heure.setAttribute('id','send_heure');
-                input_heure.setAttribute('class','send_heure');
-                input_heure.setAttribute('value',localStorage.getItem("heure_retour"));
-                document.querySelector('#div_heure').appendChild(input_heure);
+                //var div_heure = document.createElement("div");
+                //div_heure.setAttribute('id','div_heure');
+                //div_heure.setAttribute('class','div_heure');
+                //div_heure.innerHTML='<label for="send_heure">DateHeure de retour souhaitée (format YYYY-MM-DD HH:MM:SS)</label>';
+                //document.querySelector('#allornone').appendChild(div_heure);
+                //var input_heure = document.createElement("input");
+                //input_heure.setAttribute('type','text');
+                //input_heure.setAttribute('id','send_heure');
+                //input_heure.setAttribute('class','send_heure');
+                //input_heure.setAttribute('value',localStorage.getItem("heure_retour"));
+                //document.querySelector('#div_heure').appendChild(input_heure);
 
                 //Bouton Goodnight
-                var span_GN = document.createElement("span");
-                span_GN.setAttribute('class', 'span_GN');
-                span_GN.setAttribute('id', 'span_GN');
-                document.querySelector('#div_heure').appendChild(span_GN);
-                var button_GN = document.createElement("a");
-                button_GN.setAttribute('id','a_GN');
-                button_GN.setAttribute('class','tooltip js_hideTipOnMobile tpd-hideOnClickOutside');
-                button_GN.setAttribute('title','Envoyer la flotte pour la nuit');
-                button_GN.innerHTML = '<img src="https://gf2.geo.gfsrv.net/cdndf/3e567d6f16d040326c7a0ea29a4f41.gif">';
-                let bouton_GN = document.getElementById('span_GN').appendChild(button_GN);
+                //var span_GN = document.createElement("span");
+                //span_GN.setAttribute('class', 'span_GN');
+                //span_GN.setAttribute('id', 'span_GN');
+                //document.querySelector('#div_heure').appendChild(span_GN);
+                //var button_GN = document.createElement("a");
+                //button_GN.setAttribute('id','a_GN');
+                //button_GN.setAttribute('class','tooltip js_hideTipOnMobile tpd-hideOnClickOutside');
+                //button_GN.setAttribute('title','Envoyer la flotte pour la nuit');
+                //button_GN.innerHTML = '<img src="https://gf2.geo.gfsrv.net/cdndf/3e567d6f16d040326c7a0ea29a4f41.gif">';
+                //let bouton_GN = document.getElementById('span_GN').appendChild(button_GN);
             }
 
 

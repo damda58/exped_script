@@ -3,7 +3,7 @@
 // @namespace    damda58
 // @downloadURL  https://github.com/damda58/exped_script/raw/master/exped_script.user.js
 // @updateURL    https://github.com/damda58/exped_script/raw/master/exped_script.user.js
-// @version      0.7
+// @version      0.8
 // @description  try to take over the world!
 // @author       DC
 // @match        https://*.ogame.gameforge.com/game/*
@@ -147,29 +147,29 @@ class Exped
                 document.querySelector('#ul_auto').appendChild(check_auto);
 
                 //Input heure retour
-                var div_heure = document.createElement("div");
-                div_heure.setAttribute('id','div_heure');
-                div_heure.setAttribute('class','div_heure');
-                div_heure.innerHTML='<label for="send_heure">DateHeure de retour souhaitée (format YYYY-MM-DD HH:MM:SS)</label>';
-                document.querySelector('#allornone').appendChild(div_heure);
-                var input_heure = document.createElement("input");
-                input_heure.setAttribute('type','text');
-                input_heure.setAttribute('id','send_heure');
-                input_heure.setAttribute('class','send_heure');
-                input_heure.setAttribute('value',localStorage.getItem("heure_retour"));
-                document.querySelector('#div_heure').appendChild(input_heure);
+                //var div_heure = document.createElement("div");
+                //div_heure.setAttribute('id','div_heure');
+                //div_heure.setAttribute('class','div_heure');
+                //div_heure.innerHTML='<label for="send_heure">DateHeure de retour souhaitée (format YYYY-MM-DD HH:MM:SS)</label>';
+                //document.querySelector('#allornone').appendChild(div_heure);
+                //var input_heure = document.createElement("input");
+                //input_heure.setAttribute('type','text');
+                //input_heure.setAttribute('id','send_heure');
+                //input_heure.setAttribute('class','send_heure');
+                //input_heure.setAttribute('value',localStorage.getItem("heure_retour"));
+                //document.querySelector('#div_heure').appendChild(input_heure);
 
                 //Bouton Goodnight
-                var span_GN = document.createElement("span");
-                span_GN.setAttribute('class', 'span_GN');
-                span_GN.setAttribute('id', 'span_GN');
-                document.querySelector('#div_heure').appendChild(span_GN);
-                var button_GN = document.createElement("a");
-                button_GN.setAttribute('id','a_GN');
-                button_GN.setAttribute('class','tooltip js_hideTipOnMobile tpd-hideOnClickOutside');
-                button_GN.setAttribute('title','Envoyer la flotte pour la nuit');
-                button_GN.innerHTML = '<img src="https://gf2.geo.gfsrv.net/cdndf/3e567d6f16d040326c7a0ea29a4f41.gif">';
-                let bouton_GN = document.getElementById('span_GN').appendChild(button_GN);
+                //var span_GN = document.createElement("span");
+                //span_GN.setAttribute('class', 'span_GN');
+                //span_GN.setAttribute('id', 'span_GN');
+                //document.querySelector('#div_heure').appendChild(span_GN);
+                //var button_GN = document.createElement("a");
+                //button_GN.setAttribute('id','a_GN');
+                //button_GN.setAttribute('class','tooltip js_hideTipOnMobile tpd-hideOnClickOutside');
+                //button_GN.setAttribute('title','Envoyer la flotte pour la nuit');
+                //button_GN.innerHTML = '<img src="https://gf2.geo.gfsrv.net/cdndf/3e567d6f16d040326c7a0ea29a4f41.gif">';
+                //let bouton_GN = document.getElementById('span_GN').appendChild(button_GN);
             }
 
 
@@ -245,13 +245,13 @@ class Exped
                 let bouton_urg = document.querySelector('#allornone .send_urg').appendChild(button_urg);
 
                 //Event sur input
-                [input_heure].forEach(btn =>
+               // [input_heure].forEach(btn =>
                                       {
-                    btn.addEventListener('change', () =>
+                 //   btn.addEventListener('change', () =>
                                          {
                         //alert(document.getElementById("send_heure").value);
-                        localStorage.setItem("heure_retour",document.getElementById("send_heure").value);
-                    })});
+                   //     localStorage.setItem("heure_retour",document.getElementById("send_heure").value);
+                    //})});
 
                 //Event sur checkbox
                 [check_auto].forEach(btn =>
@@ -270,43 +270,43 @@ class Exped
                     })});
 
                 //Clic Good night
-                [button_GN].forEach(btn =>
+                //[button_GN].forEach(btn =>
                                     {
-                    btn.addEventListener('click', () =>
-                                         {
+                  //  btn.addEventListener('click', () =>
+//                                         {
                         //Récupère le nombre de planètes pour vérifier qu'il n'y en a pas de dispo
-                        var str_pla = document.querySelector('#countColonies .textCenter').innerHTML
-                        var nb_pla_possedee = str_pla.split("<span>");
-                        nb_pla_possedee = nb_pla_possedee[1];
-                        nb_pla_possedee = nb_pla_possedee.split("/")
-                        var nb_pla_dispo = nb_pla_possedee[1];
-                        nb_pla_possedee = nb_pla_possedee[0];
-                        nb_pla_dispo = nb_pla_dispo.split("<");
-                        nb_pla_dispo = nb_pla_dispo[0];
-                        alert("Vous avez "+nb_pla_possedee+" planètes sur "+nb_pla_dispo+" il vous reste donc "+(nb_pla_dispo-nb_pla_possedee)+" planètes a coloniser");
+  //                      var str_pla = document.querySelector('#countColonies .textCenter').innerHTML
+    //                    var nb_pla_possedee = str_pla.split("<span>");
+      //                  nb_pla_possedee = nb_pla_possedee[1];
+        //                nb_pla_possedee = nb_pla_possedee.split("/")
+          //              var nb_pla_dispo = nb_pla_possedee[1];
+            //            nb_pla_possedee = nb_pla_possedee[0];
+              //          nb_pla_dispo = nb_pla_dispo.split("<");
+                //        nb_pla_dispo = nb_pla_dispo[0];
+                  //      alert("Vous avez "+nb_pla_possedee+" planètes sur "+nb_pla_dispo+" il vous reste donc "+(nb_pla_dispo-nb_pla_possedee)+" planètes a coloniser");
 
-                        document.querySelector('#sendall').click();
-                        fleetDispatcher.targetPlanet.galaxy = coords[0];
-                        fleetDispatcher.targetPlanet.system = coords[1];
-                        fleetDispatcher.targetPlanet.position = coords[2];
-                        fleetDispatcher.targetPlanet.type = 1; //1 = planet 2 = cdr 3 = lune
-                        fleetDispatcher.mission = 7; //Mission 7 = coloniser
-                        fleetDispatcher.speedPercent = 1; // 1 = 10, 2 = 20
-                        fleetDispatcher.refresh();
-                        document.querySelector('#continueToFleet2').click();
+//                        document.querySelector('#sendall').click();
+  //                      fleetDispatcher.targetPlanet.galaxy = coords[0];
+    //                    fleetDispatcher.targetPlanet.system = coords[1];
+      //                  fleetDispatcher.targetPlanet.position = coords[2];
+        //                fleetDispatcher.targetPlanet.type = 1; //1 = planet 2 = cdr 3 = lune
+          //              fleetDispatcher.mission = 7; //Mission 7 = coloniser
+            //            fleetDispatcher.speedPercent = 1; // 1 = 10, 2 = 20
+              //          fleetDispatcher.refresh();
+                //        document.querySelector('#continueToFleet2').click();
                         //document.querySelector('#backToFleet1').click();
-                        var dateheure_actuelle = new Date();
-                        var dateheure_voulue = str_todate('-',localStorage.getItem("heure_retour"));
-                        var dateheure_retour_flotte = str_todate('.',document.getElementById('returnTime').innerHTML);
-                        console.log("dateheure_actuelle : " + dateheure_actuelle);
-                        console.log("dateheure_voulue : " + dateheure_voulue);
-                        console.log("dateheure_retour_flotte : " + dateheure_retour_flotte);
-                        var diff = (dateheure_voulue - dateheure_actuelle);
-                        alert("Le voyage doit faire minimum :"+Math.round(((diff/1000)/60))+' minutes');
-                        var diff_reel = (dateheure_retour_flotte - dateheure_actuelle);
+//                        var dateheure_actuelle = new Date();
+  //                      var dateheure_voulue = str_todate('-',localStorage.getItem("heure_retour"));
+    //                    var dateheure_retour_flotte = str_todate('.',document.getElementById('returnTime').innerHTML);
+      //                  console.log("dateheure_actuelle : " + dateheure_actuelle);
+        //                console.log("dateheure_voulue : " + dateheure_voulue);
+          //              console.log("dateheure_retour_flotte : " + dateheure_retour_flotte);
+            //            var diff = (dateheure_voulue - dateheure_actuelle);
+              //          alert("Le voyage doit faire minimum :"+Math.round(((diff/1000)/60))+' minutes');
+                //        var diff_reel = (dateheure_retour_flotte - dateheure_actuelle);
                         //alert("Avec les paramètres défini actuellement, le voyage durerai :"+Math.round(((diff_reel/1000)/60))+' minutes');
 
-                    })});
+                  //  })});
 
                 //Clic urgence
                 [bouton_urg].forEach(btn =>

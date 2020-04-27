@@ -3,7 +3,7 @@
 // @namespace    damda58
 // @downloadURL  https://github.com/damda58/exped_script/raw/master/exped_script.user.js
 // @updateURL    https://github.com/damda58/exped_script/raw/master/exped_script.user.js
-// @version      0.10
+// @version      0.11
 // @description  try to take over the world!
 // @author       DC
 // @match        https://*.ogame.gameforge.com/game/*
@@ -133,7 +133,7 @@ class Exped
                 div.setAttribute('id','ul_auto');
                 div.setAttribute('class','ul_auto');
                 div.innerHTML='<label for="send_auto">Envoi rapide</label>';
-                document.querySelector('#allornone').appendChild(div);
+                document.querySelector('#allornone .allornonewrap').appendChild(div);
                 var check_auto = document.createElement("input");
                 check_auto.setAttribute('type','checkbox');
                 check_auto.setAttribute('id','send_auto');

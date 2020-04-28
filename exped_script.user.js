@@ -3,7 +3,7 @@
 // @namespace    damda58
 // @downloadURL  https://github.com/damda58/exped_script/raw/master/exped_script.user.js
 // @updateURL    https://github.com/damda58/exped_script/raw/master/exped_script.user.js
-// @version      0.13
+// @version      0.14
 // @description  try to take over the world!
 // @author       DC
 // @match        https://*.ogame.gameforge.com/game/*
@@ -89,7 +89,7 @@ class Exped
             var div_productionboxshipyardcomponent = document.createElement("div");
             div_productionboxshipyardcomponent.setAttribute('id','productionboxshipyardcomponent');
             div_productionboxshipyardcomponent.setAttribute('class','productionboxshipyard injectedComponent parent overview');
-            document.querySelector('#middle').appendChild(div_productionboxshipyardcomponent);
+            document.querySelector('#middle .productionboxshipyard').appendChild(div_productionboxshipyardcomponent);
             var div_content_box_dc = document.createElement("div");
             div_content_box_dc.setAttribute('class','content-box-dc');
             div_productionboxshipyardcomponent.appendChild(div_content_box_dc);
@@ -112,6 +112,7 @@ class Exped
             var td_dc = document.createElement("td");
             td_dc.setAttribute('colspan','2');
             td_dc.setAttribute('class','idle');
+            td_dc.setAttribute('id','td_idle');
             tr_dc.appendChild(td_dc);
 
 
@@ -130,6 +131,298 @@ class Exped
             label_pub.setAttribute('for','check_pub');
             label_pub.innerHTML = 'Retirer la bannière de droite';
             td_dc.appendChild(label_pub);
+            td_dc.appendChild(document.createElement("br"));
+            td_dc.appendChild(document.createElement("br"));
+
+            //Tableau de la flotte sauvegardée
+            var div_technologies = document.createElement("div");
+            div_technologies.setAttribute('class','');
+            div_technologies.setAttribute('id','technologies');
+
+            td_dc.appendChild(div_technologies);
+            div_technologies.appendChild(document.createElement("br"));
+            var div_battleships = document.createElement("div");
+            div_battleships.setAttribute('id','battleships');
+            div_battleships.innerHTML = '<ul id="military" class="iconsUNUSED">';
+            div_technologies.appendChild(div_battleships);
+
+            //Clé
+            var li_technology = document.createElement("li");
+            li_technology.setAttribute('class','technology fighterLight interactive hasDetails tooltip js_hideTipOnMobile tpd-hideOnClickOutside');
+            li_technology.setAttribute('data-technology','204');
+            li_technology.setAttribute('data-status','on');
+            li_technology.setAttribute('data-is-spaceprovider','');
+            li_technology.setAttribute('aria-label','Chasseur léger');
+            li_technology.setAttribute('title','Chasseur léger');
+            document.querySelector('#military').appendChild(li_technology);
+            var span_icon = document.createElement("span");
+            span_icon.setAttribute('class','icon sprite sprite_small small fighterLight');
+            li_technology.appendChild(span_icon);
+            var input_fleet = document.createElement('input');
+            input_fleet.setAttribute('type','text');
+            input_fleet.setAttribute('name','fighterLight');
+            input_fleet.setAttribute('value',localStorage.getItem("CLe"));
+            li_technology.appendChild(input_fleet);
+
+            //Clo
+            li_technology = document.createElement("li");
+            li_technology.setAttribute('class','technology fighterHeavy interactive hasDetails tooltip js_hideTipOnMobile tpd-hideOnClickOutside');
+            li_technology.setAttribute('data-technology','204');
+            li_technology.setAttribute('data-status','on');
+            li_technology.setAttribute('data-is-spaceprovider','');
+            li_technology.setAttribute('aria-label','Chasseur lourd');
+            li_technology.setAttribute('title','Chasseur lourd');
+            document.querySelector('#military').appendChild(li_technology);
+            span_icon = document.createElement("span");
+            span_icon.setAttribute('class','icon sprite sprite_small small fighterHeavy');
+            li_technology.appendChild(span_icon);
+            input_fleet = document.createElement('input');
+            input_fleet.setAttribute('type','text');
+            input_fleet.setAttribute('name','fighterHeavy');
+            input_fleet.setAttribute('value',localStorage.getItem("CLo"));
+            li_technology.appendChild(input_fleet);
+
+            //Cro
+            li_technology = document.createElement("li");
+            li_technology.setAttribute('class','technology cruiser interactive hasDetails tooltip js_hideTipOnMobile tpd-hideOnClickOutside');
+            li_technology.setAttribute('data-technology','204');
+            li_technology.setAttribute('data-status','on');
+            li_technology.setAttribute('data-is-spaceprovider','');
+            li_technology.setAttribute('aria-label','Croiseur');
+            li_technology.setAttribute('title','Croiseur');
+            document.querySelector('#military').appendChild(li_technology);
+            span_icon = document.createElement("span");
+            span_icon.setAttribute('class','icon sprite sprite_small small cruiser');
+            li_technology.appendChild(span_icon);
+            input_fleet = document.createElement('input');
+            input_fleet.setAttribute('type','text');
+            input_fleet.setAttribute('name','cruiser');
+            input_fleet.setAttribute('value',localStorage.getItem("Cro"));
+            li_technology.appendChild(input_fleet);
+
+            //Vb
+            li_technology = document.createElement("li");
+            li_technology.setAttribute('class','technology battleship interactive hasDetails tooltip js_hideTipOnMobile tpd-hideOnClickOutside');
+            li_technology.setAttribute('data-technology','204');
+            li_technology.setAttribute('data-status','on');
+            li_technology.setAttribute('data-is-spaceprovider','');
+            li_technology.setAttribute('aria-label','Vaisseau de bataille');
+            li_technology.setAttribute('title','Vaisseau de bataille');
+            document.querySelector('#military').appendChild(li_technology);
+            span_icon = document.createElement("span");
+            span_icon.setAttribute('class','icon sprite sprite_small small battleship');
+            li_technology.appendChild(span_icon);
+            input_fleet = document.createElement('input');
+            input_fleet.setAttribute('type','text');
+            input_fleet.setAttribute('name','battleship');
+            input_fleet.setAttribute('value',localStorage.getItem("Vb"));
+            li_technology.appendChild(input_fleet);
+
+            //Tr
+            li_technology = document.createElement("li");
+            li_technology.setAttribute('class','technology interceptor interactive hasDetails tooltip js_hideTipOnMobile tpd-hideOnClickOutside');
+            li_technology.setAttribute('data-technology','204');
+            li_technology.setAttribute('data-status','on');
+            li_technology.setAttribute('data-is-spaceprovider','');
+            li_technology.setAttribute('aria-label','Traqueur');
+            li_technology.setAttribute('title','Traqueur');
+            document.querySelector('#military').appendChild(li_technology);
+            span_icon = document.createElement("span");
+            span_icon.setAttribute('class','icon sprite sprite_small small interceptor');
+            li_technology.appendChild(span_icon);
+            input_fleet = document.createElement('input');
+            input_fleet.setAttribute('type','text');
+            input_fleet.setAttribute('name','interceptor');
+            input_fleet.setAttribute('value',localStorage.getItem("Tr"));
+            li_technology.appendChild(input_fleet);
+
+            //Bom
+            li_technology = document.createElement("li");
+            li_technology.setAttribute('class','technology bomber interactive hasDetails tooltip js_hideTipOnMobile tpd-hideOnClickOutside');
+            li_technology.setAttribute('data-technology','204');
+            li_technology.setAttribute('data-status','on');
+            li_technology.setAttribute('data-is-spaceprovider','');
+            li_technology.setAttribute('aria-label','Bombardier');
+            li_technology.setAttribute('title','Bombardier');
+            document.querySelector('#military').appendChild(li_technology);
+            span_icon = document.createElement("span");
+            span_icon.setAttribute('class','icon sprite sprite_small small bomber');
+            li_technology.appendChild(span_icon);
+            input_fleet = document.createElement('input');
+            input_fleet.setAttribute('type','text');
+            input_fleet.setAttribute('name','bomber');
+            input_fleet.setAttribute('value',localStorage.getItem("Bom"));
+            li_technology.appendChild(input_fleet);
+
+            //Des
+            li_technology = document.createElement("li");
+            li_technology.setAttribute('class','technology destroyer interactive hasDetails tooltip js_hideTipOnMobile tpd-hideOnClickOutside');
+            li_technology.setAttribute('data-technology','204');
+            li_technology.setAttribute('data-status','on');
+            li_technology.setAttribute('data-is-spaceprovider','');
+            li_technology.setAttribute('aria-label','Destroyer');
+            li_technology.setAttribute('title','Destroyer');
+            document.querySelector('#military').appendChild(li_technology);
+            span_icon = document.createElement("span");
+            span_icon.setAttribute('class','icon sprite sprite_small small destroyer');
+            li_technology.appendChild(span_icon);
+            input_fleet = document.createElement('input');
+            input_fleet.setAttribute('type','text');
+            input_fleet.setAttribute('name','destroyer');
+            input_fleet.setAttribute('value',localStorage.getItem("Des"));
+            li_technology.appendChild(input_fleet);
+
+            //RIP
+            li_technology = document.createElement("li");
+            li_technology.setAttribute('class','technology deathstar interactive hasDetails tooltip js_hideTipOnMobile tpd-hideOnClickOutside');
+            li_technology.setAttribute('data-technology','204');
+            li_technology.setAttribute('data-status','on');
+            li_technology.setAttribute('data-is-spaceprovider','');
+            li_technology.setAttribute('aria-label','Etoile de la mort');
+            li_technology.setAttribute('title','Etoile de la mort');
+            document.querySelector('#military').appendChild(li_technology);
+            span_icon = document.createElement("span");
+            span_icon.setAttribute('class','icon sprite sprite_small small deathstar');
+            li_technology.appendChild(span_icon);
+            input_fleet = document.createElement('input');
+            input_fleet.setAttribute('type','text');
+            input_fleet.setAttribute('name','deathstar');
+            input_fleet.setAttribute('value',localStorage.getItem("RIP"));
+            li_technology.appendChild(input_fleet);
+
+            //Fau
+            li_technology = document.createElement("li");
+            li_technology.setAttribute('class','technology reaper interactive hasDetails tooltip js_hideTipOnMobile tpd-hideOnClickOutside');
+            li_technology.setAttribute('data-technology','204');
+            li_technology.setAttribute('data-status','on');
+            li_technology.setAttribute('data-is-spaceprovider','');
+            li_technology.setAttribute('aria-label','Faucheur');
+            li_technology.setAttribute('title','Faucheur');
+            document.querySelector('#military').appendChild(li_technology);
+            span_icon = document.createElement("span");
+            span_icon.setAttribute('class','icon sprite sprite_small small reaper');
+            li_technology.appendChild(span_icon);
+            input_fleet = document.createElement('input');
+            input_fleet.setAttribute('type','text');
+            input_fleet.setAttribute('name','reaper');
+            input_fleet.setAttribute('value',localStorage.getItem("Fau"));
+            li_technology.appendChild(input_fleet);
+
+            //Ec
+            li_technology = document.createElement("li");
+            li_technology.setAttribute('class','technology explorer interactive hasDetails tooltip js_hideTipOnMobile tpd-hideOnClickOutside');
+            li_technology.setAttribute('data-technology','204');
+            li_technology.setAttribute('data-status','on');
+            li_technology.setAttribute('data-is-spaceprovider','');
+            li_technology.setAttribute('aria-label','Éclaireur');
+            li_technology.setAttribute('title','Éclaireur');
+            document.querySelector('#military').appendChild(li_technology);
+            span_icon = document.createElement("span");
+            span_icon.setAttribute('class','icon sprite sprite_small small explorer');
+            li_technology.appendChild(span_icon);
+            input_fleet = document.createElement('input');
+            input_fleet.setAttribute('type','text');
+            input_fleet.setAttribute('name','explorer');
+            input_fleet.setAttribute('value',localStorage.getItem("Ec"));
+            li_technology.appendChild(input_fleet);
+
+
+
+            var div_civilships = document.createElement("div");
+            div_civilships.setAttribute('id','civilships');
+            div_civilships.innerHTML = '<ul id="civil" class="iconsUNUSED">';
+            div_technologies.appendChild(div_civilships)
+
+            //Pt
+            li_technology = document.createElement("li");
+            li_technology.setAttribute('class','technology transporterSmall interactive hasDetails tooltip js_hideTipOnMobile tpd-hideOnClickOutside');
+            li_technology.setAttribute('data-technology','204');
+            li_technology.setAttribute('data-status','on');
+            li_technology.setAttribute('data-is-spaceprovider','');
+            li_technology.setAttribute('aria-label','Petit transporteur');
+            li_technology.setAttribute('title','Petit transporteur');
+            document.querySelector('#civil').appendChild(li_technology);
+            span_icon = document.createElement("span");
+            span_icon.setAttribute('class','icon sprite sprite_small small transporterSmall');
+            li_technology.appendChild(span_icon);
+            input_fleet = document.createElement('input');
+            input_fleet.setAttribute('type','text');
+            input_fleet.setAttribute('name','transporterSmall');
+            input_fleet.setAttribute('value',localStorage.getItem("Pt"));
+            li_technology.appendChild(input_fleet);
+
+            //Gt
+            li_technology = document.createElement("li");
+            li_technology.setAttribute('class','technology transporterLarge interactive hasDetails tooltip js_hideTipOnMobile tpd-hideOnClickOutside');
+            li_technology.setAttribute('data-technology','204');
+            li_technology.setAttribute('data-status','on');
+            li_technology.setAttribute('data-is-spaceprovider','');
+            li_technology.setAttribute('aria-label','Grand transporteur');
+            li_technology.setAttribute('title','Grand transporteur');
+            document.querySelector('#civil').appendChild(li_technology);
+            span_icon = document.createElement("span");
+            span_icon.setAttribute('class','icon sprite sprite_small small transporterLarge');
+            li_technology.appendChild(span_icon);
+            input_fleet = document.createElement('input');
+            input_fleet.setAttribute('type','text');
+            input_fleet.setAttribute('name','transporterLarge');
+            input_fleet.setAttribute('value',localStorage.getItem("Gt"));
+            li_technology.appendChild(input_fleet);
+
+            //So
+            li_technology = document.createElement("li");
+            li_technology.setAttribute('class','technology espionageProbe interactive hasDetails tooltip js_hideTipOnMobile tpd-hideOnClickOutside');
+            li_technology.setAttribute('data-technology','204');
+            li_technology.setAttribute('data-status','on');
+            li_technology.setAttribute('data-is-spaceprovider','');
+            li_technology.setAttribute('aria-label','Sonde');
+            li_technology.setAttribute('title','Sonde');
+            document.querySelector('#civil').appendChild(li_technology);
+            span_icon = document.createElement("span");
+            span_icon.setAttribute('class','icon sprite sprite_small small espionageProbe');
+            li_technology.appendChild(span_icon);
+            input_fleet = document.createElement('input');
+            input_fleet.setAttribute('type','text');
+            input_fleet.setAttribute('name','espionageProbe');
+            input_fleet.setAttribute('value',localStorage.getItem("So"));
+            li_technology.appendChild(input_fleet);
+
+
+            //Bouton sauve Flotte
+            var span_sauv = document.createElement("span");
+            span_sauv.setAttribute('class', 'send_sauv');
+            document.querySelector('#td_idle').appendChild(span_sauv);
+            var button_sauv = document.createElement("a");
+            button_sauv.setAttribute('id','sauv');
+            button_sauv.setAttribute('class','tooltip js_hideTipOnMobile tpd-hideOnClickOutside');
+            button_sauv.setAttribute('title','Sauvegarde de la flotte');
+            button_sauv.innerHTML = '<img src="https://gf2.geo.gfsrv.net/cdndf/3e567d6f16d040326c7a0ea29a4f41.gif">';
+            let bouton_sauv = span_sauv.appendChild(button_sauv);
+             [bouton_sauv].forEach(btn =>
+                                      {
+                    btn.addEventListener('click', () =>
+                                         {
+
+                        localStorage.setItem("CLe",document.getElementsByName("fighterLight")[0].value);
+                        localStorage.setItem("CLo",document.getElementsByName("fighterHeavy")[0].value);
+                        localStorage.setItem("Cro",document.getElementsByName("cruiser")[0].value);
+                        localStorage.setItem("Vb",document.getElementsByName("battleship")[0].value);
+                        localStorage.setItem("Tr",document.getElementsByName("interceptor")[0].value);
+                        localStorage.setItem("Bom",document.getElementsByName("bomber")[0].value);
+                        localStorage.setItem("Des",document.getElementsByName("destroyer")[0].value);
+                        localStorage.setItem("RIP",document.getElementsByName("deathstar")[0].value);
+                        localStorage.setItem("Fau",document.getElementsByName("reaper")[0].value);
+                        localStorage.setItem("Ec",document.getElementsByName("explorer")[0].value);
+                        localStorage.setItem("Pt",document.getElementsByName("transporterSmall")[0].value);
+                        localStorage.setItem("Gt",document.getElementsByName("transporterLarge")[0].value);
+                        localStorage.setItem("So",document.getElementsByName("espionageProbe")[0].value);
+                        alert("Sauvegardé");
+                    }
+                                        )
+                }
+                                     )
+
+
 
             //Footer
             var div_footer = document.createElement("div");
@@ -848,4 +1141,23 @@ text-align: center;
 width: 177px;
 }
 
+#ingamepage tr.hover td
+{
+background-color:#23282d;
+}
+
+#battleships {
+width: 406px !important;
+}
+
+#civilships {
+width: 250px !important;
+}
+
+#technologies {
+position: relative;
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+}
 `);

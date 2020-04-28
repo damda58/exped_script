@@ -3,7 +3,7 @@
 // @namespace    damda58
 // @downloadURL  https://github.com/damda58/exped_script/raw/master/exped_script.user.js
 // @updateURL    https://github.com/damda58/exped_script/raw/master/exped_script.user.js
-// @version      0.14
+// @version      0.15
 // @description  try to take over the world!
 // @author       DC
 // @match        https://*.ogame.gameforge.com/game/*
@@ -135,6 +135,9 @@ class Exped
             td_dc.appendChild(document.createElement("br"));
 
             //Tableau de la flotte sauvegardée
+            var span_1 = document.createElement("span");
+            span_1.innerHTML = "<h3>Flotte pour les expéditions</h3>";
+            td_dc.appendChild(span_1);
             var div_technologies = document.createElement("div");
             div_technologies.setAttribute('class','');
             div_technologies.setAttribute('id','technologies');

@@ -3,7 +3,7 @@
 // @namespace    damda58
 // @downloadURL  https://github.com/damda58/exped_script/raw/master/exped_script.user.js
 // @updateURL    https://github.com/damda58/exped_script/raw/master/exped_script.user.js
-// @version      0.15
+// @version      0.16
 // @description  try to take over the world!
 // @author       DC
 // @match        https://*.ogame.gameforge.com/game/*
@@ -92,6 +92,7 @@ class Exped
             document.querySelector('#middle .productionboxshipyard').appendChild(div_productionboxshipyardcomponent);
             var div_content_box_dc = document.createElement("div");
             div_content_box_dc.setAttribute('class','content-box-dc');
+            div_content_box_dc.setAttribute('id','div_DC');
             div_productionboxshipyardcomponent.appendChild(div_content_box_dc);
             var div_header = document.createElement("div");
             div_header.setAttribute('class','header');
@@ -1138,26 +1139,22 @@ padding: 3px;
 font-size: 11px;
 }
 
-#pageContent .content-box-s .content td.idle {
+#pageContent .content-box-dc .content td.idle {
 padding: 10px 0;
 text-align: center;
 width: 177px;
 }
 
-#ingamepage tr.hover td
-{
-background-color:#23282d;
-}
 
-#battleships {
+#div_DC #battleships {
 width: 406px !important;
 }
 
-#civilships {
+#div_DC #civilships {
 width: 250px !important;
 }
 
-#technologies {
+#div_DC #technologies {
 position: relative;
 display: flex;
 flex-direction: row;

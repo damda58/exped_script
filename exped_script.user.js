@@ -3,7 +3,7 @@
 // @namespace    damda58
 // @downloadURL  https://github.com/damda58/exped_script/raw/master/exped_script.user.js
 // @updateURL    https://github.com/damda58/exped_script/raw/master/exped_script.user.js
-// @version      0.18
+// @version      0.19
 // @description  try to take over the world!
 // @author       DC
 // @match        https://*.ogame.gameforge.com/game/*
@@ -90,26 +90,40 @@ class Exped
             div_productionboxshipyardcomponent.setAttribute('id','productionboxshipyardcomponent');
             div_productionboxshipyardcomponent.setAttribute('class','productionboxshipyard injectedComponent parent overview');
             document.querySelector('#middle .productionboxshipyard').appendChild(div_productionboxshipyardcomponent);
+
             var div_content_box_dc = document.createElement("div");
             div_content_box_dc.setAttribute('class','content-box-dc');
             div_content_box_dc.setAttribute('id','div_DC');
             div_productionboxshipyardcomponent.appendChild(div_content_box_dc);
+
             var div_header = document.createElement("div");
             div_header.setAttribute('class','header');
-            div_header.innerHTML = '<h3>Configuration Exped Script</h3>';
             div_content_box_dc.appendChild(div_header);
+            var link_hide = document.createElement("a");
+            link_hide.setAttribute('id','js_eventClosedConfig');
+            link_hide.setAttribute('class','tooltipRight js_hideTipOnMobile tpd-hideOnClickOutside');
+            link_hide.setAttribute('href','javascript:void(0);');
+            link_hide.innerHTML = '<h3>Configuration Exped Script</h3>';
+            let bouton_hide = div_header.appendChild(link_hide);
+
             var div_content = document.createElement("div");
             div_content.setAttribute('class','content');
+            div_content.setAttribute('id','content_dc');
+            div_content.setAttribute('visible','vrai');
             div_content_box_dc.appendChild(div_content);
+
             var table_dc = document.createElement("table");
             table_dc.setAttribute('cellspacing','0');
             table_dc.setAttribute('cellpadding','0');
             table_dc.setAttribute('class','construction active');
             div_content.appendChild(table_dc);
+
             var tbody_dc = document.createElement("tbody");
             table_dc.appendChild(tbody_dc);
+
             var tr_dc = document.createElement("tr");
             tbody_dc.appendChild(tr_dc);
+
             var td_dc = document.createElement("td");
             td_dc.setAttribute('colspan','2');
             td_dc.setAttribute('class','idle');
@@ -403,38 +417,59 @@ class Exped
             button_sauv.setAttribute('title','Sauvegarde de la flotte');
             button_sauv.innerHTML = '<img src="https://gf2.geo.gfsrv.net/cdndf/3e567d6f16d040326c7a0ea29a4f41.gif">';
             let bouton_sauv = span_sauv.appendChild(button_sauv);
-             [bouton_sauv].forEach(btn =>
-                                      {
-                    btn.addEventListener('click', () =>
-                                         {
+            [bouton_sauv].forEach(btn =>
+                                  {
+                btn.addEventListener('click', () =>
+                                     {
 
-                        localStorage.setItem("CLe",document.getElementsByName("fighterLight")[0].value);
-                        localStorage.setItem("CLo",document.getElementsByName("fighterHeavy")[0].value);
-                        localStorage.setItem("Cro",document.getElementsByName("cruiser")[0].value);
-                        localStorage.setItem("Vb",document.getElementsByName("battleship")[0].value);
-                        localStorage.setItem("Tr",document.getElementsByName("interceptor")[0].value);
-                        localStorage.setItem("Bom",document.getElementsByName("bomber")[0].value);
-                        localStorage.setItem("Des",document.getElementsByName("destroyer")[0].value);
-                        localStorage.setItem("RIP",document.getElementsByName("deathstar")[0].value);
-                        localStorage.setItem("Fau",document.getElementsByName("reaper")[0].value);
-                        localStorage.setItem("Ec",document.getElementsByName("explorer")[0].value);
-                        localStorage.setItem("Pt",document.getElementsByName("transporterSmall")[0].value);
-                        localStorage.setItem("Gt",document.getElementsByName("transporterLarge")[0].value);
-                        localStorage.setItem("So",document.getElementsByName("espionageProbe")[0].value);
-                        alert("Sauvegardé");
-                    }
-                                        )
+                    localStorage.setItem("CLe",document.getElementsByName("fighterLight")[0].value);
+                    localStorage.setItem("CLo",document.getElementsByName("fighterHeavy")[0].value);
+                    localStorage.setItem("Cro",document.getElementsByName("cruiser")[0].value);
+                    localStorage.setItem("Vb",document.getElementsByName("battleship")[0].value);
+                    localStorage.setItem("Tr",document.getElementsByName("interceptor")[0].value);
+                    localStorage.setItem("Bom",document.getElementsByName("bomber")[0].value);
+                    localStorage.setItem("Des",document.getElementsByName("destroyer")[0].value);
+                    localStorage.setItem("RIP",document.getElementsByName("deathstar")[0].value);
+                    localStorage.setItem("Fau",document.getElementsByName("reaper")[0].value);
+                    localStorage.setItem("Ec",document.getElementsByName("explorer")[0].value);
+                    localStorage.setItem("Pt",document.getElementsByName("transporterSmall")[0].value);
+                    localStorage.setItem("Gt",document.getElementsByName("transporterLarge")[0].value);
+                    localStorage.setItem("So",document.getElementsByName("espionageProbe")[0].value);
+                    alert("Sauvegardé");
                 }
-                                     )
+                                    )
+            }
+                                 )
 
 
 
             //Footer
             var div_footer = document.createElement("div");
             div_footer.setAttribute('class','footer');
+            div_footer.setAttribute('id','footer_dc');
             div_content_box_dc.appendChild(div_footer);
 
+            //Event sur cacher la config
+            [bouton_hide].forEach(btn =>
+                                  {
+                btn.addEventListener('click', () =>
+                                     {
+                    if (document.getElementById('content_dc'))
+                    {
+                        if (document.getElementById('content_dc').getAttribute("visible") == "vrai")
+                        {
+                            document.getElementById('content_dc').setAttribute("visible","faux")
+                            document.getElementById('content_dc').setAttribute("style","display:none");
 
+                        }
+                        else
+                        {
+                            document.getElementById('content_dc').setAttribute("visible","vrai")
+                            document.getElementById('content_dc').setAttribute("style","display:block");
+                        }
+                    }
+
+                })});
 
             //Event sur checkbox Pub
             [check_pub].forEach(btn =>
@@ -1102,10 +1137,24 @@ width: 670px;
 text-align: center;
 }
 
+div.content-box-dc .header h3 a {
+color: #6f9fc8;
+font-size: 11px;
+font-weight: 700;
+padding-top: 10px;
+width: 670px;
+text-align: center;
+text-decoration:none;
+}
+
 .content-box-dc .header {
 background: url("data:image/gif;base64,R0lGODlhngIgAPcsAAYSGQoZIQQIDAAAAAYQFwEBAQQHCgoaIwEBAgAAAQAAAAECAwQHCwAAAAQLEQAAAAECAwAAAAABAQIEBwgWHgEDBAECAg0YHwkQFwMGCQcQFgEEBwQKEAIDBgIFCAIHCwoTGQwVHQQJDQEDBQYLEQgPFRAaIwEEBwcNEgECAwsUGgUICwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH/C1hNUCBEYXRhWE1QPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS42LWMxNDUgNzkuMTYzNDk5LCAyMDE4LzA4LzEzLTE2OjQwOjIyICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ0MgMjAxOSAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6ODVBNTJDMzA4ODkzMTFFQTlFMTNFRTA0M0U4RTMwNzEiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6ODVBNTJDMzE4ODkzMTFFQTlFMTNFRTA0M0U4RTMwNzEiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo4NUE1MkMyRTg4OTMxMUVBOUUxM0VFMDQzRThFMzA3MSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo4NUE1MkMyRjg4OTMxMUVBOUUxM0VFMDQzRThFMzA3MSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PgH//v38+/r5+Pf29fTz8vHw7+7t7Ovq6ejn5uXk4+Lh4N/e3dzb2tnY19bV1NPS0dDPzs3My8rJyMfGxcTDwsHAv769vLu6ubi3trW0s7KxsK+urayrqqmop6alpKOioaCfnp2cm5qZmJeWlZSTkpGQj46NjIuKiYiHhoWEg4KBgH9+fXx7enl4d3Z1dHNycXBvbm1sa2ppaGdmZWRjYmFgX15dXFtaWVhXVlVUU1JRUE9OTUxLSklIR0ZFRENCQUA/Pj08Ozo5ODc2NTQzMjEwLy4tLCsqKSgnJiUk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") no-repeat;
 height: 32px;
 font-size: 11px;
+}
+
+.content-box-dc .header:hover {
+cursor: pointer;
 }
 
 #pageContent .content-box-dc .content {
@@ -1152,7 +1201,7 @@ width: 406px !important;
 }
 
 #div_DC #civilships {
-width: 250px !important;
+width: 200px !important;
 }
 
 #div_DC #technologies {

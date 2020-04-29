@@ -3,7 +3,7 @@
 // @namespace    damda58
 // @downloadURL  https://github.com/damda58/exped_script/raw/master/exped_script.user.js
 // @updateURL    https://github.com/damda58/exped_script/raw/master/exped_script.user.js
-// @version      0.19
+// @version      0.20
 // @description  try to take over the world!
 // @author       DC
 // @match        https://*.ogame.gameforge.com/game/*
@@ -152,15 +152,17 @@ class Exped
 
             //Tableau de la flotte sauvegardée
             var span_1 = document.createElement("span");
-            span_1.innerHTML = "<h3>Flotte pour les expéditions</h3>";
+            span_1.innerHTML = "<h3>Epéditions</h3>";
             td_dc.appendChild(span_1);
             td_dc.appendChild(document.createElement("br"));
+
             var div_technologies = document.createElement("div");
             div_technologies.setAttribute('class','');
             div_technologies.setAttribute('id','technologies');
-
             td_dc.appendChild(div_technologies);
             div_technologies.appendChild(document.createElement("br"));
+            div_technologies.appendChild(document.createElement("br"));
+
             var div_battleships = document.createElement("div");
             div_battleships.setAttribute('id','battleships');
             div_battleships.innerHTML = '<ul id="military" class="iconsUNUSED">';
@@ -406,7 +408,33 @@ class Exped
             input_fleet.setAttribute('name','espionageProbe');
             input_fleet.setAttribute('value',localStorage.getItem("So"));
             li_technology.appendChild(input_fleet);
+            td_dc.appendChild(document.createElement("br"));
 
+            //Temps expédition
+            var label_tps = document.createElement('label');
+            label_tps.setAttribute('for','expeditiontime');
+            label_tps.innerHTML = "Temps d'expédition : ";
+            td_dc.appendChild(label_tps);
+
+            var tps_exped = document.createElement("select");
+            tps_exped.setAttribute('name','expeditiontime');
+            tps_exped.setAttribute('id','expeditiontime');
+            tps_exped.innerHTML = '<option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option>';
+            let change_tps = td_dc.appendChild(tps_exped);
+            td_dc.appendChild(document.createElement("br"));
+
+            //Vitesse
+            var label_speed = document.createElement('label');
+            label_speed.setAttribute('for','speed');
+            label_speed.innerHTML = "Vitesse vaisseau : ";
+            td_dc.appendChild(label_speed);
+            var speed_exped = document.createElement("select");
+            speed_exped.setAttribute('name','speed');
+            speed_exped.setAttribute('id','speed');
+            speed_exped.innerHTML = '<option value="1">10%</option><option value="2">20%</option><option value="3">30%</option><option value="4">40%</option><option value="5">50%</option><option value="6">60%</option><option value="7">70%</option><option value="8">80%</option><option value="9">90%</option><option value="10">100%</option>';
+            let change_speed = td_dc.appendChild(speed_exped);
+            td_dc.appendChild(document.createElement("br"));
+            td_dc.appendChild(document.createElement("br"));
 
             //Bouton sauve Flotte
             var span_sauv = document.createElement("span");
@@ -450,6 +478,22 @@ class Exped
             div_footer.setAttribute('id','footer_dc');
             div_content_box_dc.appendChild(div_footer);
 
+            //Event sur le choix du temps exped
+            [change_tps].forEach(btn =>
+                                 {
+                btn.addEventListener('change', () =>
+                                     {
+                    localStorage.setItem("tps_exped",document.getElementById('expeditiontime').selectedIndex)
+                })});
+
+            //Event sur le choix vitesse
+            [change_speed].forEach(btn =>
+                                   {
+                btn.addEventListener('change', () =>
+                                     {
+                    localStorage.setItem("speed",document.getElementById('speed').selectedIndex)
+                })});
+
             //Event sur cacher la config
             [bouton_hide].forEach(btn =>
                                   {
@@ -467,6 +511,23 @@ class Exped
                         {
                             document.getElementById('content_dc').setAttribute("visible","vrai")
                             document.getElementById('content_dc').setAttribute("style","display:block");
+                            if (localStorage.getItem("tps_exped") == "null")
+                            {
+                                document.getElementById('expeditiontime').selectedIndex = 0;
+                            }
+                            else
+                            {
+                                document.getElementById('expeditiontime').selectedIndex = localStorage.getItem("tps_exped");
+                            }
+
+                            if (localStorage.getItem("speed") == "null")
+                            {
+                                document.getElementById('speed').selectedIndex = 10;
+                            }
+                            else
+                            {
+                                document.getElementById('speed').selectedIndex = localStorage.getItem("speed");
+                            }
                         }
                     }
 
@@ -556,6 +617,10 @@ class Exped
 
                 }
                 document.querySelector('#ul_auto').appendChild(check_auto);
+
+                var infos = document.createElement("p");
+                infos.innerHTML = "Temps expédition : "+(parseInt(localStorage.getItem("tps_exped"))+1)+"h - Vitesse des vaisseaux : "+(parseInt(localStorage.getItem("speed"))+1)+"0%";
+                div.appendChild(infos);
 
                 //Input heure retour
                 //var div_heure = document.createElement("div");
@@ -801,20 +866,36 @@ class Exped
                         fleetDispatcher.targetPlanet.position = 16;
                         fleetDispatcher.targetPlanet.type = 1;
                         fleetDispatcher.targetPlanet.name = '-';
-                        fleetDispatcher.mission = 15;
-                        fleetDispatcher.expeditionTime = 1;
-                        fleetDispatcher.speedPercent = 10; // 1 = 10, 2 = 20
+                        fleetDispatcher.mission = 15; //15 = exped
+                        //fleetDispatcher.expeditionTime = 1; // Marche pas
+                        if (localStorage.getItem("speed") == "null")
+                        {
+                            fleetDispatcher.speedPercent = 10 //100% par defaut
+                        }
+                        else
+                        {
+                            fleetDispatcher.speedPercent = parseInt(localStorage.getItem("speed"))+1;
+                        }
                         fleetDispatcher.refresh();
+
                         if(localStorage.getItem("Send_auto") == 1)
                         {
                             document.querySelector('#continueToFleet2').click();
 
                             if(document.querySelector('#continueToFleet3'))
                             {
-
                                 sleep(getRandomIntInclusive(500,1100)).then(() => {
                                     document.querySelector('#continueToFleet3').click();
                                     sleep(getRandomIntInclusive(500,1200)).then(() => {
+                                        if (localStorage.getItem("tps_exped") == "null")
+                                        {
+                                            document.getElementById('expeditiontime').selectedIndex = 0;
+                                        }
+                                        else
+                                        {
+                                            document.getElementById('expeditiontime').selectedIndex = localStorage.getItem("tps_exped");
+                                        }
+                                        document.querySelector('#missionButton15').click();
                                         document.querySelector('#sendFleet').click();
                                     })
                                 })
@@ -873,6 +954,8 @@ function default_config() {
     localStorage.setItem("Pt",0);
     localStorage.setItem("Gt",0);
     localStorage.setItem("So",0);
+    localStorage.setItem("tps_exped",0);
+    localStorage.setItem("speed",10);
     localStorage.setItem("Send_auto",0);
 }
 

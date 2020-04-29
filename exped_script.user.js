@@ -109,7 +109,8 @@ class Exped
             var div_content = document.createElement("div");
             div_content.setAttribute('class','content');
             div_content.setAttribute('id','content_dc');
-            div_content.setAttribute('visible','vrai');
+            div_content.setAttribute('visible','faux');
+            div_content.setAttribute('style','display:none');
             div_content_box_dc.appendChild(div_content);
 
             var table_dc = document.createElement("table");

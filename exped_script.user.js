@@ -3,7 +3,7 @@
 // @namespace    damda58
 // @downloadURL  https://github.com/damda58/exped_script/raw/master/exped_script.user.js
 // @updateURL    https://github.com/damda58/exped_script/raw/master/exped_script.user.js
-// @version      0.20
+// @version      0.21
 // @description  try to take over the world!
 // @author       DC
 // @match        https://*.ogame.gameforge.com/game/*
@@ -835,11 +835,11 @@ class Exped
                         let SS = "" ;
                         if (type == 'C')
                         {
-                            SS = coords[1];
+                            window.SS = coords[1];
                         }
                         else
                         {
-                            SS = getRandomIntInclusive(parseInt(coords[1]) - 5, parseInt(coords[1]) + 5);
+                            getRandomIntInclusive(parseInt(coords[1]) - 5, parseInt(coords[1]) + 5,parseInt(coords[1]));
                         }
 
 
@@ -862,7 +862,7 @@ class Exped
 
 
                         fleetDispatcher.targetPlanet.galaxy = coords[0];
-                        fleetDispatcher.targetPlanet.system = SS;
+                        fleetDispatcher.targetPlanet.system = window.SS;
                         fleetDispatcher.targetPlanet.position = 16;
                         fleetDispatcher.targetPlanet.type = 1;
                         fleetDispatcher.targetPlanet.name = '-';
@@ -933,10 +933,21 @@ function goodbyeTipped()
     else requestAnimationFrame(() => goodbyeTipped());
 }
 
-function getRandomIntInclusive(min, max) {
+function getRandomIntInclusive(min, max, SS_actuel) {
     min = Math.ceil(min);
     max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min +1)) + min;
+    var random = 0;
+    random = Math.floor(Math.random() * (max - min +1)) + min;
+    //Si on est sur le même SS alors on relance
+    if (random == SS_actuel)
+    {
+        getRandomIntInclusive(min,max,SS_actuel);
+    }
+    else
+    {
+        window.SS = random;
+        return random;
+    }
 }
 
 function default_config() {

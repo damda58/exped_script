@@ -3,7 +3,7 @@
 // @namespace    damda58
 // @downloadURL  https://github.com/damda58/exped_script/raw/master/exped_script.user.js
 // @updateURL    https://github.com/damda58/exped_script/raw/master/exped_script.user.js
-// @version      0.21
+// @version      0.22
 // @description  try to take over the world!
 // @author       DC
 // @match        https://*.ogame.gameforge.com/game/*
@@ -79,6 +79,7 @@ class Exped
     {
         this.expedition();
         this.show_config();
+        this.show_debris_exped();
         //this.show_fleet();
     }
     show_config()
@@ -551,6 +552,51 @@ class Exped
         }
     }
 
+    show_debris_exped()
+    {
+        if(this.page == "galaxy")
+        {
+            //On check le chargement des galaxy
+            var target = document.getElementById('galaxyLoading');
+
+
+            var galaxyLoading = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutationRecord) {
+
+                    if(document.getElementById("debris16"))
+                    {
+                        var div_debris = document.getElementById("debris16")
+                        var li_debris = div_debris.getElementsByClassName("debris-content");
+                        var qt_metal = li_debris[0].innerHTML;
+                        var qt_cristal = li_debris[1].innerHTML;
+                        var res_metal = qt_metal.split(":");
+                        qt_metal = res_metal[1];
+                        var res_cristal = qt_cristal.split(":");
+                        qt_cristal = res_cristal[1];
+                        console.log(parseInt(qt_metal));
+                        console.log(parseInt(qt_cristal));
+                        if (target.getAttribute('style') == "display: none;")
+                        {
+                            var div_expeditionDebrisSlotBox = document.getElementsByClassName("expeditionDebrisSlotBox");
+                            if (parseInt(qt_metal.replace('.','')) >= 15000 || parseInt(qt_cristal.replace('.','')) > 15000)
+                            {
+                                div_expeditionDebrisSlotBox[0].setAttribute('style','background-color : rgba(212, 54, 53, 0.80)');
+                            }
+                            var p_champ = div_expeditionDebrisSlotBox[0].getElementsByClassName("name");
+
+                            var span_debris = document.createElement("span");
+                            span_debris.setAttribute('id','debris_exped');
+                            span_debris.innerHTML = "Métal : "+qt_metal.replace('.',' ') + "  Cristal : " + qt_cristal.replace('.',' ');
+                            p_champ[0].appendChild(span_debris);
+                        }
+                    }
+                });
+            });
+            galaxyLoading.observe(target, { attributes : true, attributeFilter : ['style'] });
+        }
+    }
+
+
     show_fleet()
     {
 
@@ -619,7 +665,7 @@ class Exped
                 document.querySelector('#ul_auto').appendChild(check_auto);
 
                 var infos = document.createElement("p");
-                infos.innerHTML = "Temps expédition : "+(parseInt(localStorage.getItem("tps_exped"))+1)+"h - Vitesse des vaisseaux : "+(parseInt(localStorage.getItem("speed"))+1)+"0%";
+                infos.innerHTML = "Temps expédition : <b>"+(parseInt(localStorage.getItem("tps_exped"))+1)+"h</b> - Vitesse des vaisseaux : <b>"+(parseInt(localStorage.getItem("speed"))+1)+"0%</b>";
                 div.appendChild(infos);
 
                 //Input heure retour

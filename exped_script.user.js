@@ -3,7 +3,7 @@
 // @namespace    damda58
 // @downloadURL  https://github.com/damda58/exped_script/raw/master/exped_script.user.js
 // @updateURL    https://github.com/damda58/exped_script/raw/master/exped_script.user.js
-// @version      0.22
+// @version      0.23
 // @description  try to take over the world!
 // @author       DC
 // @match        https://*.ogame.gameforge.com/game/*
@@ -144,11 +144,27 @@ class Exped
 
             }
             td_dc.appendChild(check_pub);
+
             var label_pub = document.createElement("label");
             label_pub.setAttribute('for','check_pub');
             label_pub.innerHTML = 'Retirer la bannière de droite';
             td_dc.appendChild(label_pub);
             td_dc.appendChild(document.createElement("br"));
+
+            //Input seuil surbrillance champ débrit exped
+            var seuil_exped = document.createElement("input");
+            seuil_exped.setAttribute('type','text');
+            seuil_exped.setAttribute('id','seuil_exped');
+            seuil_exped.setAttribute('value',localStorage.getItem("seuil_exped"));
+            //si send auto est activé alors on coche la checkbox
+            td_dc.appendChild(seuil_exped);
+
+            var label_seuil = document.createElement("label");
+            label_seuil.setAttribute('for','seuil_exped');
+            label_seuil.innerHTML = 'Seuil de surbrillance champs débris exped';
+            td_dc.appendChild(label_seuil);
+            td_dc.appendChild(document.createElement("br"));
+            td_dc.appendChild(document.createElement("hr"));
             td_dc.appendChild(document.createElement("br"));
 
             //Tableau de la flotte sauvegardée
@@ -465,6 +481,7 @@ class Exped
                     localStorage.setItem("Pt",document.getElementsByName("transporterSmall")[0].value);
                     localStorage.setItem("Gt",document.getElementsByName("transporterLarge")[0].value);
                     localStorage.setItem("So",document.getElementsByName("espionageProbe")[0].value);
+                    localStorage.setItem("seuil_exped",document.getElementById("seuil_exped").value);
                     alert("Sauvegardé");
                 }
                                     )
@@ -578,7 +595,13 @@ class Exped
                         if (target.getAttribute('style') == "display: none;")
                         {
                             var div_expeditionDebrisSlotBox = document.getElementsByClassName("expeditionDebrisSlotBox");
-                            if (parseInt(qt_metal.replace('.','')) >= 15000 || parseInt(qt_cristal.replace('.','')) > 15000)
+                            var seuil_exped =  localStorage.getItem("seuil_exped");
+                            if (seuil_exped == null)
+                            {
+                                seuil_exped = 15000
+                            }
+
+                            if ((parseInt(qt_metal.replace('.','')) +parseInt(qt_cristal.replace('.',''))) > seuil_exped )
                             {
                                 div_expeditionDebrisSlotBox[0].setAttribute('style','background-color : rgba(212, 54, 53, 0.80)');
                             }

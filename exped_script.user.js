@@ -3,7 +3,7 @@
 // @namespace    damda58
 // @downloadURL  https://github.com/damda58/exped_script/raw/master/exped_script.user.js
 // @updateURL    https://github.com/damda58/exped_script/raw/master/exped_script.user.js
-// @version      0.23
+// @version      0.24
 // @description  try to take over the world!
 // @author       DC
 // @match        https://*.ogame.gameforge.com/game/*
@@ -590,8 +590,7 @@ class Exped
                         qt_metal = res_metal[1];
                         var res_cristal = qt_cristal.split(":");
                         qt_cristal = res_cristal[1];
-                        console.log(parseInt(qt_metal));
-                        console.log(parseInt(qt_cristal));
+
                         if (target.getAttribute('style') == "display: none;")
                         {
                             var div_expeditionDebrisSlotBox = document.getElementsByClassName("expeditionDebrisSlotBox");
@@ -601,7 +600,7 @@ class Exped
                                 seuil_exped = 15000
                             }
 
-                            if ((parseInt(qt_metal.replace('.','')) +parseInt(qt_cristal.replace('.',''))) > seuil_exped )
+                            if ((parseInt(qt_metal.replace(/\./g,'')) +parseInt(qt_cristal.replace(/\./g,''))) > seuil_exped )
                             {
                                 div_expeditionDebrisSlotBox[0].setAttribute('style','background-color : rgba(212, 54, 53, 0.80)');
                             }
@@ -609,7 +608,7 @@ class Exped
 
                             var span_debris = document.createElement("span");
                             span_debris.setAttribute('id','debris_exped');
-                            span_debris.innerHTML = "Métal : "+qt_metal.replace('.',' ') + "  Cristal : " + qt_cristal.replace('.',' ');
+                            span_debris.innerHTML = "Métal : "+qt_metal.replace(/\./g,' ') + "  Cristal : " + qt_cristal.replace(/\./g,' ');
                             p_champ[0].appendChild(span_debris);
                         }
                     }

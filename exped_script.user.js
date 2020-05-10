@@ -3,7 +3,7 @@
 // @namespace    damda58
 // @downloadURL  https://github.com/damda58/exped_script/raw/master/exped_script.user.js
 // @updateURL    https://github.com/damda58/exped_script/raw/master/exped_script.user.js
-// @version      0.24
+// @version      0.25
 // @description  try to take over the world!
 // @author       DC
 // @match        https://*.ogame.gameforge.com/game/*
@@ -137,7 +137,6 @@ class Exped
             var check_pub = document.createElement("input");
             check_pub.setAttribute('type','checkbox');
             check_pub.setAttribute('id','check_pub');
-            //si send auto est activé alors on coche la checkbox
             if(localStorage.getItem("check_pub") == 1)
             {
                 check_pub.checked = true;
@@ -149,6 +148,23 @@ class Exped
             label_pub.setAttribute('for','check_pub');
             label_pub.innerHTML = 'Retirer la bannière de droite';
             td_dc.appendChild(label_pub);
+            td_dc.appendChild(document.createElement("br"));
+
+            //Checkbox affiche exped SS aléatoire
+            var check_ss_random= document.createElement("input");
+            check_ss_random.setAttribute('type','checkbox');
+            check_ss_random.setAttribute('id','check_ss_random');
+            if(localStorage.getItem("check_ss_random") == 1)
+            {
+                check_ss_random.checked = true;
+
+            }
+            td_dc.appendChild(check_ss_random);
+
+            var label_ss_random = document.createElement("label");
+            label_ss_random.setAttribute('for','check_ss_random');
+            label_ss_random.innerHTML = 'Affiche le bouton Exped SS aléatoire';
+            td_dc.appendChild(label_ss_random);
             td_dc.appendChild(document.createElement("br"));
 
             //Input seuil surbrillance champ débrit exped
@@ -482,6 +498,14 @@ class Exped
                     localStorage.setItem("Gt",document.getElementsByName("transporterLarge")[0].value);
                     localStorage.setItem("So",document.getElementsByName("espionageProbe")[0].value);
                     localStorage.setItem("seuil_exped",document.getElementById("seuil_exped").value);
+                    if(document.getElementById("check_ss_random").checked)
+                    {
+                        localStorage.setItem("check_ss_random",1)
+                    }
+                    else
+                    {
+                        localStorage.setItem("check_ss_random",0)
+                    }
                     alert("Sauvegardé");
                 }
                                     )
@@ -764,8 +788,15 @@ class Exped
                 button.setAttribute('class','tooltip js_hideTipOnMobile tpd-hideOnClickOutside');
                 button.setAttribute('title','Envoyer expédition dans un système aléatoire');
                 button.innerHTML = '<img src="https://gf2.geo.gfsrv.net/cdndf/3e567d6f16d040326c7a0ea29a4f41.gif">';
+                if  (localStorage.getItem("check_ss_random" == 1 ) || localStorage.getItem("check_ss_random" == null))
+                {
+                    button.setAttribute("style","display:block");
+                }
+                else
+                {
+                    button.setAttribute("style","display:none");
+                }
                 let Exped_random = document.querySelector('#allornone .send_exped_random').appendChild(button);
-
                 //Bouton Expédition
                 var span2 = document.createElement("span");
                 span2.setAttribute('class', 'send_exped');

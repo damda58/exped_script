@@ -788,7 +788,7 @@ class Exped
                 button.setAttribute('class','tooltip js_hideTipOnMobile tpd-hideOnClickOutside');
                 button.setAttribute('title','Envoyer expédition dans un système aléatoire');
                 button.innerHTML = '<img src="https://gf2.geo.gfsrv.net/cdndf/3e567d6f16d040326c7a0ea29a4f41.gif">';
-                if  (localStorage.getItem("check_ss_random" == 1 ) || localStorage.getItem("check_ss_random" == null))
+                if  (localStorage.getItem("check_ss_random") == 1 || localStorage.getItem("check_ss_random") == null)
                 {
                     button.setAttribute("style","display:block");
                 }

@@ -3,7 +3,7 @@
 // @namespace    damda58
 // @downloadURL  https://github.com/damda58/exped_script/raw/master/exped_script.user.js
 // @updateURL    https://github.com/damda58/exped_script/raw/master/exped_script.user.js
-// @version      0.30
+// @version      0.31
 // @description  try to take over the world!
 // @author       DC
 // @match        https://*.ogame.gameforge.com/game/*
@@ -1196,7 +1196,7 @@ GM_addStyle(`
 background:#0d1014;
 border-radius:5px;
 display:grid !important;
-grid-template-columns:repeat(7,auto);
+grid-template-columns:repeat(6,auto);
 padding:5px !important;
 width:239px !important;
 }

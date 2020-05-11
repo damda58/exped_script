@@ -3,7 +3,7 @@
 // @namespace    damda58
 // @downloadURL  https://github.com/damda58/exped_script/raw/master/exped_script.user.js
 // @updateURL    https://github.com/damda58/exped_script/raw/master/exped_script.user.js
-// @version      0.28
+// @version      0.30
 // @description  try to take over the world!
 // @author       DC
 // @match        https://*.ogame.gameforge.com/game/*
@@ -752,6 +752,26 @@ class Exped
 
             if (document.querySelector('#allornone .secondcol'))
             {
+
+                //Suppression des boutons d'OGlight
+                //On attend la fin de chargement de la page
+                var target = document.getElementById('eventboxLoading');
+                var PageLoading = new MutationObserver(function(mutations) {
+                    mutations.forEach(function(mutationRecord) {
+                        sleep(3000).then(() => {
+                            var bouton_oglight = document.querySelector("#allornone > div.allornonewrap > div.secondcol.fleft > button.ogl-prefab.ogl-ptexpe");
+                            bouton_oglight.remove();
+                            var bouton_oglight_gt = document.querySelector("#allornone > div.allornonewrap > div.secondcol.fleft > button");
+                            bouton_oglight_gt.remove();
+                            //bouton_oglight[1].remove();
+                        });
+
+
+
+                    });
+                });
+                PageLoading.observe(target, { attributes : true, attributeFilter : ['style'] });
+
 
                 //Bouton de sauvegarde de la flotte
                 var span_sauv = document.createElement("span");

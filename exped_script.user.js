@@ -3,7 +3,7 @@
 // @namespace    damda58
 // @downloadURL  https://github.com/damda58/exped_script/raw/master/exped_script.user.js
 // @updateURL    https://github.com/damda58/exped_script/raw/master/exped_script.user.js
-// @version      0.26
+// @version      0.28
 // @description  try to take over the world!
 // @author       DC
 // @match        https://*.ogame.gameforge.com/game/*
@@ -606,10 +606,20 @@ class Exped
 
                     if(document.getElementById("debris16"))
                     {
-                        var div_debris = document.getElementById("debris16")
+                        var div_debris = document.getElementById("debris16");
+                        var position_res = document.getElementById("pos-debris").innerHTML;
+                        position_res = position_res.replace(/\[/g,'');
+                        position_res = position_res.replace(/\]/g,'');
+                        position_res = position_res.split(":");
+                        var galaxy_res = position_res[0];
+                        var system_res = position_res[1];
                         var li_debris = div_debris.getElementsByClassName("debris-content");
+                        var li_recyclers = div_debris.getElementsByClassName("debris-recyclers");
                         var qt_metal = li_debris[0].innerHTML;
                         var qt_cristal = li_debris[1].innerHTML;
+                        var qt_eclaireurs = li_recyclers[0].innerHTML;
+                        var res_eclaireurs = qt_eclaireurs.split(":");
+                        qt_eclaireurs = parseInt(res_eclaireurs[1]);
                         var res_metal = qt_metal.split(":");
                         qt_metal = res_metal[1];
                         var res_cristal = qt_cristal.split(":");
@@ -624,15 +634,14 @@ class Exped
                                 seuil_exped = 15000
                             }
 
-                            if ((parseInt(qt_metal.replace(/\./g,'')) +parseInt(qt_cristal.replace(/\./g,''))) > seuil_exped )
+                            if ((parseInt(qt_metal.replace(/\./g,'')) + parseInt(qt_cristal.replace(/\./g,''))) > seuil_exped )
                             {
                                 div_expeditionDebrisSlotBox[0].setAttribute('style','background-color : rgba(212, 54, 53, 0.80)');
                             }
                             var p_champ = div_expeditionDebrisSlotBox[0].getElementsByClassName("name");
-
                             var span_debris = document.createElement("span");
                             span_debris.setAttribute('id','debris_exped');
-                            span_debris.innerHTML = "Métal : "+qt_metal.replace(/\./g,' ') + "  Cristal : " + qt_cristal.replace(/\./g,' ');
+                            span_debris.innerHTML = "Métal : "+qt_metal.replace(/\./g,' ') + "  Cristal : " + qt_cristal.replace(/\./g,' ')+' <a href="#" onclick="sendShips(8,'+galaxy_res+','+system_res+',16,2,'+qt_eclaireurs+');return false">Recycler</a>';
                             p_champ[0].appendChild(span_debris);
                         }
                     }
@@ -1167,7 +1176,7 @@ GM_addStyle(`
 background:#0d1014;
 border-radius:5px;
 display:grid !important;
-grid-template-columns:repeat(7, auto);
+grid-template-columns:repeat(7,auto);
 padding:5px !important;
 width:239px !important;
 }

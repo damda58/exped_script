@@ -3,7 +3,7 @@
 // @namespace    damda58
 // @downloadURL  https://github.com/damda58/exped_script/raw/master/exped_script.user.js
 // @updateURL    https://github.com/damda58/exped_script/raw/master/exped_script.user.js
-// @version      0.35
+// @version      0.36
 // @description  try to take over the world!
 // @author       DC
 // @match        https://*.ogame.gameforge.com/game/*
@@ -210,7 +210,7 @@ class Exped
 
             var label_discord_link = document.createElement("label");
             label_discord_link.setAttribute('for','discord_link');
-            label_discord_link.innerHTML = 'Lien webhook Discord';
+            label_discord_link.innerHTML = '<a href="https://discordjs.guide/popular-topics/webhooks.html#creating-webhooks" target="blank"> Lien webhook Discord</a>';
             td_dc.appendChild(label_discord_link);
 
             td_dc.appendChild(document.createElement("hr"));

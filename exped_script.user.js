@@ -3,7 +3,7 @@
 // @namespace    damda58
 // @downloadURL  https://github.com/damda58/exped_script/raw/master/exped_script.user.js
 // @updateURL    https://github.com/damda58/exped_script/raw/master/exped_script.user.js
-// @version      0.31
+// @version      0.35
 // @description  try to take over the world!
 // @author       DC
 // @match        https://*.ogame.gameforge.com/game/*
@@ -77,13 +77,17 @@ class Exped
 
     start()
     {
+        //localStorage.setItem("cache_nb_msg",0);
         this.expedition();
         this.show_config();
         this.show_debris_exped();
-        //this.show_fleet();
+        this.show_fleet();
     }
+
+
     show_config()
     {
+        clock();
         if(this.page == "overview")
         {
             //Construction du cadre contenant la configuration
@@ -172,7 +176,6 @@ class Exped
             seuil_exped.setAttribute('type','text');
             seuil_exped.setAttribute('id','seuil_exped');
             seuil_exped.setAttribute('value',localStorage.getItem("seuil_exped"));
-            //si send auto est activé alors on coche la checkbox
             td_dc.appendChild(seuil_exped);
 
             var label_seuil = document.createElement("label");
@@ -180,6 +183,36 @@ class Exped
             label_seuil.innerHTML = 'Seuil de surbrillance champs débris exped';
             td_dc.appendChild(label_seuil);
             td_dc.appendChild(document.createElement("br"));
+
+             //Checkbox discord
+            var check_discord = document.createElement("input");
+            check_discord.setAttribute('type','checkbox');
+            check_discord.setAttribute('id','check_discord');
+            if((localStorage.getItem("check_discord") == 1))
+            {
+                 check_discord.checked = true;
+            }
+            td_dc.appendChild(check_discord);
+
+            var label_check_discord = document.createElement("label");
+            label_check_discord.setAttribute('for','check_discord');
+            label_check_discord.innerHTML = 'Active envois discord';
+            td_dc.appendChild(label_check_discord);
+            td_dc.appendChild(document.createElement("br"));
+
+              //Input discord webhook
+            var discord_link = document.createElement("input");
+            discord_link.setAttribute('type','text');
+            discord_link.setAttribute('id','discord_link');
+            discord_link.setAttribute('size','50');
+            discord_link.setAttribute('value',localStorage.getItem("discord_link"));
+            td_dc.appendChild(discord_link);
+
+            var label_discord_link = document.createElement("label");
+            label_discord_link.setAttribute('for','discord_link');
+            label_discord_link.innerHTML = 'Lien webhook Discord';
+            td_dc.appendChild(label_discord_link);
+
             td_dc.appendChild(document.createElement("hr"));
             td_dc.appendChild(document.createElement("br"));
 
@@ -498,6 +531,17 @@ class Exped
                     localStorage.setItem("Gt",document.getElementsByName("transporterLarge")[0].value);
                     localStorage.setItem("So",document.getElementsByName("espionageProbe")[0].value);
                     localStorage.setItem("seuil_exped",document.getElementById("seuil_exped").value);
+                    localStorage.setItem("discord_link",document.getElementById("discord_link").value);
+
+                     if(document.getElementById("check_discord").checked)
+                    {
+                        localStorage.setItem("check_discord",1)
+                    }
+                    else
+                    {
+                        localStorage.setItem("check_discord",0)
+                    }
+
                     if(document.getElementById("check_ss_random").checked)
                     {
                         localStorage.setItem("check_ss_random",1)
@@ -607,19 +651,11 @@ class Exped
                     if(document.getElementById("debris16"))
                     {
                         var div_debris = document.getElementById("debris16");
-                        var position_res = document.getElementById("pos-debris").innerHTML;
-                        position_res = position_res.replace(/\[/g,'');
-                        position_res = position_res.replace(/\]/g,'');
-                        position_res = position_res.split(":");
-                        var galaxy_res = position_res[0];
-                        var system_res = position_res[1];
+                        var onclick = document.querySelector("#debris16 > ul.ListLinks > li:nth-child(4) > a");
+                        onclick = onclick.getAttribute('onclick');
                         var li_debris = div_debris.getElementsByClassName("debris-content");
-                        var li_recyclers = div_debris.getElementsByClassName("debris-recyclers");
                         var qt_metal = li_debris[0].innerHTML;
                         var qt_cristal = li_debris[1].innerHTML;
-                        var qt_eclaireurs = li_recyclers[0].innerHTML;
-                        var res_eclaireurs = qt_eclaireurs.split(":");
-                        qt_eclaireurs = parseInt(res_eclaireurs[1]);
                         var res_metal = qt_metal.split(":");
                         qt_metal = res_metal[1];
                         var res_cristal = qt_cristal.split(":");
@@ -628,7 +664,7 @@ class Exped
                         if (target.getAttribute('style') == "display: none;")
                         {
                             var div_expeditionDebrisSlotBox = document.getElementsByClassName("expeditionDebrisSlotBox");
-                            var seuil_exped =  localStorage.getItem("seuil_exped");
+                            var seuil_exped = localStorage.getItem("seuil_exped");
                             if (seuil_exped == null)
                             {
                                 seuil_exped = 15000
@@ -641,7 +677,7 @@ class Exped
                             var p_champ = div_expeditionDebrisSlotBox[0].getElementsByClassName("name");
                             var span_debris = document.createElement("span");
                             span_debris.setAttribute('id','debris_exped');
-                            span_debris.innerHTML = "Métal : "+qt_metal.replace(/\./g,' ') + "  Cristal : " + qt_cristal.replace(/\./g,' ')+' <a href="#" onclick="sendShips(8,'+galaxy_res+','+system_res+',16,2,'+qt_eclaireurs+');return false">Recycler</a>';
+                            span_debris.innerHTML = "Métal : "+qt_metal.replace(/\./g,' ') + "  Cristal : " + qt_cristal.replace(/\./g,' ')+' <a href="#" onclick="'+onclick+'">Recycler</a>';
                             p_champ[0].appendChild(span_debris);
                         }
                     }
@@ -654,44 +690,27 @@ class Exped
 
     show_fleet()
     {
+        //Chargement de page terminée, on attend l'affichage de la flotte
+        var target_box = document.querySelector("#js_eventDetailsClosed");
+        var PageLoading_box = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutationRecord) {
 
-        if(this.page == "overview")
-        {
+                if(target_box.getAttribute('style')=='display: none;'){
+                    sleep(400).then(() => {
+                        //ajout_alert();
+                    });
+                }
+            });
+        });
 
-            var dpil = document.querySelector('#js_eventDetailsClosed');
-            [dpil].forEach(btn =>
-                           {
-                btn.addEventListener('click', () =>
-                                     {
-                    var eventFleet = document.getElementsByClassName("eventFleet");
-                    for (i = 0; i < eventFleet.length; i++)
-                        if (eventFleet[i].getAttribute('data-return-flight')=='true')
-                        {
-                            var td_alert = document.createElement("td");
-                            td_alert.setAttribute('class','send_Alert');
-                            eventFleet[i].appendChild(td_alert);
-                            var a_alert = document.createElement("a");
-                            a_alert.setAttribute('class','send_Alert tooltip');
-                            a_alert.setAttribute('title','Envoyer une alerte lorsque arrivé');
-                            a_alert.innerHTML = '<img src="https://gf2.geo.gfsrv.net/cdndf/3e567d6f16d040326c7a0ea29a4f41.gif">';
-                            td_alert.appendChild(a_alert);
-                            var span_alert = document.createElement("span");
-                            span_alert.setAttribute('class','icon icon_chat');
-                            a_alert.appendChild(span_alert);
-
-                        }
-
-                })});
-
-
-
-        }
-
+        PageLoading_box.observe(target_box, { attributes : true, attributeFilter : ['style'] });
     }
 
     expedition()
     {
+
         if(localStorage.getItem("check_pub") == 1)
+
         {
             var Pub = document.getElementById('banner_skyscraper');
             Pub.remove();
@@ -758,12 +777,11 @@ class Exped
                 var target = document.getElementById('eventboxLoading');
                 var PageLoading = new MutationObserver(function(mutations) {
                     mutations.forEach(function(mutationRecord) {
-                        sleep(3000).then(() => {
+                        sleep(400).then(() => {
                             var bouton_oglight = document.querySelector("#allornone > div.allornonewrap > div.secondcol.fleft > button.ogl-prefab.ogl-ptexpe");
                             bouton_oglight.remove();
                             var bouton_oglight_gt = document.querySelector("#allornone > div.allornonewrap > div.secondcol.fleft > button");
                             bouton_oglight_gt.remove();
-                            //bouton_oglight[1].remove();
                         });
 
 
@@ -817,7 +835,7 @@ class Exped
                 button.setAttribute('class','tooltip js_hideTipOnMobile tpd-hideOnClickOutside');
                 button.setAttribute('title','Envoyer expédition dans un système aléatoire');
                 button.innerHTML = '<img src="https://gf2.geo.gfsrv.net/cdndf/3e567d6f16d040326c7a0ea29a4f41.gif">';
-                if  (localStorage.getItem("check_ss_random") == 1 || localStorage.getItem("check_ss_random") == null)
+                if(localStorage.getItem("check_ss_random") == 1 || localStorage.getItem("check_ss_random") == null)
                 {
                     button.setAttribute("style","display:block");
                 }
@@ -967,7 +985,7 @@ class Exped
                         }
                         else
                         {
-                            getRandomIntInclusive(parseInt(coords[1]) - 5, parseInt(coords[1]) + 5,parseInt(coords[1]));
+                            getRandomIntInclusive(parseInt(coords[1]) - 3, parseInt(coords[1]) + 3,parseInt(coords[1]));
                         }
 
 
@@ -1048,18 +1066,7 @@ window.addEventListener ("DOMContentLoaded", () =>
 const sleep = (milliseconds) => {
     return new Promise(resolve => setTimeout(resolve, milliseconds))
 }
-// goodbye tooltips
-function goodbyeTipped()
-{
-    if(typeof Tipped !== 'undefined')
-    {
-        for(let [key] of Object.entries(Tipped))
-        {
-            Tipped[key] = function() { return false; }
-        }
-    }
-    else requestAnimationFrame(() => goodbyeTipped());
-}
+
 
 function getRandomIntInclusive(min, max, SS_actuel) {
     min = Math.ceil(min);
@@ -1096,26 +1103,47 @@ function default_config() {
     localStorage.setItem("tps_exped",0);
     localStorage.setItem("speed",10);
     localStorage.setItem("Send_auto",0);
+    localStorage.setItem("cache_nb_msg",0);
 }
 
-function DisplayMenu()
+
+function ajout_alert()
 {
-    if (document.getElementById('playerName'))
+
+    //Suppression de tous les boutons existant
+    var bouton = document.querySelectorAll("#send_Alert");
+    var i;
+    for (i = 0; i < bouton.length; i++)
     {
-        var icone = 'data:image/gif;base64,R0lGODlhGwAbAPelABAXGg0UFhMYHRohJgYKDQIEBwYLDRYcIRQaHgIEBgcLDwMFCAIFCAAAAAAAAAAAABUbIAYKDwIFB5eWkggOEQAAAAECAwAAAJaXlpWVkpWWlXh8fAQHCRsiKhofJRwjKBogJh0kKUlSVhohJW1xcwIEBWxxc5KUkpOTkpWUkpWUk5aWk3l8fCEkLCElKQQHCCMrL3x9fpWWlpOWlmFobwMGCQwPEJKSkm5ydgAAAJaXlTY6PwUIDFhfYwYJDwAAAQABAhcdIH+Eh32FiZWSkUxQWUxUWWdsbJaVjhMaHRMXGnZ2dgoPFg4TGRUaHw4WGjpARA4UGAMGCAQHCgECAgICBG55fwwPFg4VGCs2QAABAmJpawQGCAABApWXlUJJVCUsMhAWGpWWkgkOEgcNEI2NjZeWkTI6RCgvNSAkKJSWlRYdIQkPEl5kYys2QQcNEU9SVpaWlJaWli8yNDtBSjZBTZOUlgUGCDA5QAQICiovNgAAAS02Pl5kZggNEpGVkZWWkWZqbRMdJVRZXXiAh1FXYlheYAQHCpOSjwAAAWNobRQZHy45QAcKDwkMD0lKUBshJCYpMzU8RAABAwAAAAIDBoeLjWlvdBwlLGdxe5aVkYWIiY+SkhQZHhMXHRUbHgICAxYbIBUbHxYcIAAAAP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH/C1hNUCBEYXRhWE1QPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS42LWMxNDUgNzkuMTYzNDk5LCAyMDE4LzA4LzEzLTE2OjQwOjIyICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ0MgMjAxOSAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NTg0OTY5QTg4MjY4MTFFQTk5RDZFRjgxRDVEQzg3QjEiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NTg0OTY5QTk4MjY4MTFFQTk5RDZFRjgxRDVEQzg3QjEiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo1ODQ5NjlBNjgyNjgxMUVBOTlENkVGODFENURDODdCMSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo1ODQ5NjlBNzgyNjgxMUVBOTlENkVGODFENURDODdCMSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PgH//v38+/r5+Pf29fTz8vHw7+7t7Ovq6ejn5uXk4+Lh4N/e3dzb2tnY19bV1NPS0dDPzs3My8rJyMfGxcTDwsHAv769vLu6ubi3trW0s7KxsK+urayrqqmop6alpKOioaCfnp2cm5qZmJeWlZSTkpGQj46NjIuKiYiHhoWEg4KBgH9+fXx7enl4d3Z1dHNycXBvbm1sa2ppaGdmZWRjYmFgX15dXFtaWVhXVlVUU1JRUE9OTUxLSklIR0ZFRENCQUA/Pj08Ozo5ODc2NTQzMjEwLy4tLCsqKSgnJiUkIyIhIB8eHRwbGhkYFxYVFBMSERAPDg0MCwoJCAcGBQQDAgEAACH5BAEAAKUALAAAAAAbABsAAAj/AEuVGjCqoMGDCBMOEFjKg8JPDx+WGpGwosWLGDMWRBCqo8ePIEOCHCBAlMmTKEWNgpCyZRIBoQ6ucfOh4IGbBzIKgIkyyx8WX0CYZNky5c5Qn5J+OmNGxYQNUIIoTSpqqtJRAhB02tqpg5AVMuIAMsHHCddFXNN2yuqpbds6GDRosKMJSSAwbvO6DZMVgF+/ggh5yZDihCVOZdrA+MvYr4UoASJHfsJIDRExOqxgwrNlwyA0WCRHpkKqtGnTl+QYgjNhTuk7ehTRiHS6dm0IM44kIpHBxWlIImzYHk6qBwYfk/og8kS8uWk/KOiULrLJkXPnhWKY3rFEyXXijW5cZDHdYgiP78ONPDqdJlMX9LUT4Eh0usl7+KclhcBPiv7wLkx8ZwF/zlVSAigIJqjgggwmWEUpeRxyCAc1LGChBBgWoGECGzLgoRRcvMABQ2yM8QYZCqRoAAErshiBizBSQIFAAQEAOw==';
-
-        var AJours = "";
-        //alert(Boolean(GM_getValue(nomScript+"aJours",'true')) + '  '+ GM_getValue(nomScript+"aJours",'true'))
-
-        var aff_option ='<span class="menu_icon"><a id="iconeUpdate" href='+(AJours ? adresse_forum : "https://openuserjs.org/scripts/benneb/InfoCompte3" )+' target="blank_" ><img class="mouseSwitch" src="'+(icone)+'" height="27" width="27"></span><a class="menubutton "';
-        aff_option += 'href="" accesskey="" target="_self">';
-        aff_option += '<span class="textlabel">Exped 5000</span></a>';
-
-        var tableau = document.createElement("li");
-        tableau.innerHTML = aff_option;
-        tableau.id='optionIFC';
-        document.getElementById('menuTableTools').appendChild(tableau);
+        bouton[i].remove();
     }
+
+
+
+    var eventContent = document.querySelector("#eventContent > tbody");
+    var TReventFleet = eventContent.getElementsByClassName("eventFleet");
+    for (i = 0; i < TReventFleet.length; i++)
+    {
+        if (TReventFleet[i].getAttribute('data-return-flight')=='true')
+        {
+            var td_alert = document.createElement("td");
+            td_alert.setAttribute('class','send_Alert');
+            td_alert.setAttribute('id','send_Alert');
+            TReventFleet[i].appendChild(td_alert);
+
+            var a_alert = document.createElement("a");
+            a_alert.setAttribute('class','send_Alert tooltip');
+            a_alert.setAttribute('id','a_send_Alert');
+            a_alert.setAttribute('title','Envoyer une alerte lorsque arrivé');
+            a_alert.innerHTML = '<img src="https://gf2.geo.gfsrv.net/cdndf/3e567d6f16d040326c7a0ea29a4f41.gif">';
+            td_alert.appendChild(a_alert);
+
+            var span_alert = document.createElement("span");
+            span_alert.setAttribute('class','icon icon_alert');
+            a_alert.appendChild(span_alert);
+        }
+    }
+
 }
 
 function selectShips(shipID, amount)
@@ -1178,6 +1206,175 @@ function str_todate(delimiteur,dateheure_voulue_str)
 
 function insertAfter(newNode, referenceNode) {
     referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+}
+
+function send_discord(type,message, color) {
+   if (localStorage.getItem("check_discord") == 1){
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", localStorage.getItem("discord_link"),true);
+
+    //Envoie les informations du header adaptées avec la requête
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.onreadystatechange = function() { //Appelle une fonction au changement d'état.
+        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+        }
+    }
+    var data = JSON.stringify({"embeds":[{"title": type,"description":message, "username": "Roger Bot","color": color}]});
+    console.log(data);
+    xhr.send(data);
+   }
+}
+
+function clock ()
+{
+    // Selectionne le noeud dont les mutations seront observées
+    var targetNode = document.querySelector("#bar > ul > li.OGameClock");
+
+    // Options de l'observateur (quelles sont les mutations à observer)
+    var config = { childList: true };
+
+    // Fonction callback à éxécuter quand une mutation est observée
+    var callback = function(mutationsList) {
+        for(var mutation of mutationsList) {
+            if (mutation.type == 'childList') {
+                //Debut check 1s
+
+                //check nouveau message
+                var nb_msg = document.querySelector("#message-wrapper .new_msg_count.totalChatMessages");
+                if(parseInt(nb_msg.innerHTML) != 0)
+                {
+                    // console.log("En cache : "+localStorage.getItem("cache_nb_msg")+" constaté : "+parseInt(nb_msg.innerHTML));
+                    //Si le nombre de message sauvé est supérieur a nombre de message constaté c'est qu'on les as consulté alors on actualise le cache
+                    if(localStorage.getItem("cache_nb_msg") >= parseInt(nb_msg.innerHTML))
+                    {
+                        localStorage.setItem("cache_nb_msg",parseInt(nb_msg.innerHTML));
+                    }
+                    else
+                    {
+                        send_discord("Nouveau message","Un nouveau message viens d'être envoyé IG",9737364);
+                        localStorage.setItem("cache_nb_msg",parseInt(nb_msg.innerHTML));
+                    }
+                }
+                else{
+                    localStorage.setItem("cache_nb_msg",0);
+                    // console.log("En cache : "+localStorage.getItem("cache_nb_msg")+" constaté : "+parseInt(nb_msg.innerHTML));
+                }
+
+                //Tableau des arrivée de flotte
+                var eventContent = document.querySelector("#eventContent > tbody");
+                var TReventFleet = eventContent.getElementsByClassName("eventFleet");
+                var j = 0;
+                for (j = 0; j < TReventFleet.length; j++)
+                {
+                    var mission = TReventFleet[j].querySelector("td.missionFleet > img")
+
+                    if(mission.hasAttribute('title'))
+
+                    {
+                        mission = mission.getAttribute('title');
+                    }
+                    else {
+                        mission = mission.getAttribute('data-title');
+                    }
+                    mission = mission.split('|');
+                    var cargo = "";
+                    var envoi = new Boolean(false);
+                    if(TReventFleet[j].getAttribute('data-return-flight')=='true')
+                    {
+                        cargo = TReventFleet[j].querySelector("td.icon_movement_reserve > span")
+                        envoi = true;
+                    }
+                    else {
+                        cargo = TReventFleet[j].querySelector("td.icon_movement > span");
+                    }
+
+                    if((mission[1] == " Stationner") || (mission[1] == " Transporter") || (mission[1] == " Flotte marchande")) {
+                        envoi = true;
+                    }
+
+                    if(cargo.hasAttribute('title'))
+
+                    {
+                        cargo = cargo.getAttribute('title');
+                    }
+                    else {
+                        cargo = cargo.getAttribute('data-title');
+                    }
+
+                    var contenu_cargo = document.createElement( 'html' );
+                    contenu_cargo.innerHTML = cargo;
+                    //console.log(contenu_cargo);
+                    var met
+                    var cri
+                    var deut
+                    contenu_cargo = contenu_cargo.getElementsByTagName('td');
+                    var i
+                    for (i = 0; i < contenu_cargo.length; i++)
+                    {
+                        //console.log(contenu_cargo[j].innerHTML);
+                        if(contenu_cargo[i].innerHTML=='Métal:'){
+                            met = contenu_cargo[i+1].innerHTML;
+                        }
+                        if(contenu_cargo[i].innerHTML=='Cristal:'){
+                            cri = contenu_cargo[i+1].innerHTML;
+                        }
+                        if(contenu_cargo[i].innerHTML=='Deutérium:'){
+                            deut = contenu_cargo[i+1].innerHTML;
+                        }
+                    }
+                    //console.log(met+" "+cri+" "+deut);
+                    var arrival = TReventFleet[j].querySelector('td.countDown > span');
+                    var depart = TReventFleet[j].querySelector("td.coordsOrigin > a");
+                    var arrivee = TReventFleet[j].querySelector("td.destCoords > a");
+                    var nb_vaisseau = TReventFleet[j].querySelector("td.detailsFleet > span")
+                    depart = depart.innerHTML
+                    depart = depart.replace(/\n|\r| /g,'');
+                    arrivee = arrivee.innerHTML
+                    arrivee = arrivee.replace(/\n|\r| /g,'');
+                    if((arrival.innerHTML == "59s")&&(envoi==true))
+                    {
+
+                        switch(mission[1]) {
+
+                            case " Flotte marchande":
+                                send_discord('Marchand','Une flotte Marchande de **'+nb_vaisseau.innerHTML+"** vaisseaux arrive dans moins d'une minute en "+arrivee,57568);
+                                break;
+                            case " Expédition (R)":
+                                send_discord('Expedition','Une flotte de **'+nb_vaisseau.innerHTML+"** vaisseaux partis explorer en "+arrivee+" arrive dans moins d'une minute. Cette flotte transporte **"+met+'** metal **'+cri+'** cristal **'+deut+'** deut',1127128);
+                                break;
+                            case " Exploiter (R)":
+                                send_discord('CDR','Une flotte de **'+nb_vaisseau.innerHTML+"** vaisseaux ont récupérés **"+met+'** metal **'+cri+'** cristal **'+deut+'** deut en '+arrivee,1500025);
+                                break;
+                            case " Transporter (R)":
+                                send_discord('Retour de Transport','Une flotte de **'+nb_vaisseau.innerHTML+"** vaisseaux en partance de "+arrivee+" viens de rentrer en "+depart,7517026);
+                                break;
+                            case " Transporter":
+                                send_discord('Livraison','Une flotte de **'+nb_vaisseau.innerHTML+"** vaisseaux viens de déposer **"+met+'** metal **'+cri+'** cristal **'+deut+"** deut sur "+arrivee,7517026);
+                                break;
+                            case " Stationner":
+                                send_discord('Stationner','Une flotte de **'+nb_vaisseau.innerHTML+"** vaisseaux en partance de "+depart+' vers '+arrivee+" arrive dans moins d'une minute. Cette flotte transporte **"+met+'** metal **'+cri+'** cristal **'+deut+'** deut',1500025);
+                                break;
+                            case " Expédition":
+                                break;
+                            default:
+                                send_discord('Autre','Une flotte de **'+nb_vaisseau.innerHTML+"** vaisseaux en partance de "+depart+' vers '+arrivee+" arrive dans moins d'une minute.",9737364);
+                        }
+                    }
+                }
+
+                //Fin Check 1s
+            }
+        }
+    };
+
+    // Créé une instance de l'observateur lié à la fonction de callback
+    var observer = new MutationObserver(callback);
+
+    // Commence à observer le noeud cible pour les mutations précédemment configurées
+    observer.observe(targetNode, config);
+
+    // L'observation peut être arrêtée par la suite
+    //observer.disconnect();
 }
 
 GM_addStyle(`
@@ -1432,5 +1629,9 @@ position: relative;
 display: flex;
 flex-direction: row;
 justify-content: space-between;
+}
+
+.icon_alert {
+background-position:0px 224px;
 }
 `);

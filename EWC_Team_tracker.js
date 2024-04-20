@@ -3,7 +3,7 @@
 // @namespace    damda58
 // @downloadURL  https://raw.githubusercontent.com/damda58/exped_script/master/EWC_Team_tracker.js
 // @updateURL    https://raw.githubusercontent.com/damda58/exped_script/master/EWC_Team_tracker.js
-// @version      0.1
+// @version      0.2
 // @description  Mettre en surbrillance la team choisi dans les live timing
 // @author       Damien Cebrian
 // @match        https://www.its-live.net*
@@ -26,6 +26,7 @@
                     console.log("Moto #24 trouvée ! Mettant en surbrillance la ligne...");
                     rows[i].style.backgroundColor = 'yellow'; // Fond jaune
                     rows[i].parentNode.style.color = 'black'; // Police en noir
+                    rows[i].parentNode.style.font-weight = 'bold'; // Police en noir
                     break;
                 }
             }

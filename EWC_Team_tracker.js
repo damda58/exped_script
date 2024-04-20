@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         EWC Team tracker
 // @namespace    damda58
-// @downloadURL  https://github.com/damda58/exped_script/raw/master/EWC_Team_tracker.js
-// @updateURL    https://github.com/damda58/exped_script/raw/master/EWC_Team_tracker.js
+// @downloadURL  https://raw.githubusercontent.com/damda58/exped_script/master/EWC_Team_tracker.js
+// @updateURL    https://raw.githubusercontent.com/damda58/exped_script/master/EWC_Team_tracker.js
 // @version      0.1
 // @description  Mettre en surbrillance la team choisi dans les live timing
 // @author       Damien Cebrian

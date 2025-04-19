@@ -3,37 +3,60 @@
 // @namespace    damda58
 // @downloadURL  https://raw.githubusercontent.com/damda58/exped_script/master/EWC_Team_tracker.js
 // @updateURL    https://raw.githubusercontent.com/damda58/exped_script/master/EWC_Team_tracker.js
-// @version      0.2
+// @version      0.3
 // @description  Mettre en surbrillance la team choisi dans les live timing
 // @author       Damien Cebrian
-// @match        https://www.its-live.net*
+// @match        https://www.its-live.net/
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=its-live.net
 // @grant        none
 // ==/UserScript==
 
 (function() {
     'use strict';
-
+    
     // Fonction pour mettre en surbrillance la ligne correspondant à la moto #24
-   function highlightBike24Row() {
+    function highlightBike24Row() {
         console.log("Début de la recherche de la ligne de la moto #24");
-        setTimeout(function() {
-            const rows = document.querySelectorAll('.row-content');
+        
+        // Fonction pour vérifier et mettre en surbrillance les lignes
+        function checkAndHighlight() {
+            // Sélectionner tous les tr dans les tables
+            const rows = document.querySelectorAll('table.ng-star-inserted tr');
+            
             for (let i = 0; i < rows.length; i++) {
-                const motoNumber = rows[i].querySelector('.number .value').innerText.trim();
-                console.log("Numéro de moto trouvé : " + motoNumber);
-                if (motoNumber === '#24') {
+                // Chercher le span avec la classe "value" à l'intérieur de ce tr
+                const valueSpan = rows[i].querySelector('span.value');
+                
+                if (valueSpan && valueSpan.textContent.trim() === '#24') {
                     console.log("Moto #24 trouvée ! Mettant en surbrillance la ligne...");
                     rows[i].style.backgroundColor = 'yellow'; // Fond jaune
-                    rows[i].parentNode.style.color = 'black'; // Police en noir
-                    rows[i].parentNode.style.font-weight = 'bold'; // Police en noir
+                    rows[i].style.color = 'black'; // Police en noir
+                    rows[i].style.fontWeight = 'bold'; // Police en gras
+                    // Scrolling vers l'élément pour qu'il soit visible
+                    rows[i].scrollIntoView({ behavior: 'smooth', block: 'center' });
                     break;
                 }
             }
-            console.log("Fin de la recherche de la ligne de la moto #24");
-        }, 8000); // Délai de 2 secondes (2000 millisecondes)
+        }
+        
+        // Exécuter immédiatement une première fois
+        setTimeout(checkAndHighlight, 2000);
+        
+        // Puis mettre en place un observateur pour détecter les changements dans le DOM
+        const observer = new MutationObserver(function(mutations) {
+            checkAndHighlight();
+        });
+        
+        // Options de configuration de l'observateur
+        const config = { 
+            childList: true, 
+            subtree: true 
+        };
+        
+        // Commencer à observer le document avec les options configurées
+        observer.observe(document.body, config);
     }
-
+    
     // Appel de la fonction highlightBike24Row
     highlightBike24Row();
 })();

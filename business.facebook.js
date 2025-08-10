@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         EWC Team tracker
+// @name         business.facebook
 // @namespace    damda58
 // @downloadURL  https://raw.githubusercontent.com/damda58/exped_script/master/business.facebook.js
 // @updateURL    https://raw.githubusercontent.com/damda58/exped_script/master/business.facebook.js
